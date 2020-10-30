@@ -1,13 +1,15 @@
 package com.ues.crm_backend.DataBase.Repositories;
 
 import com.ues.crm_backend.DataBase.Interfaces.ICompanyRepository;
-import com.ues.crm_backend.Models.Company;
+import com.ues.crm_backend.Models.Company.Company;
+import com.ues.crm_backend.Models.Company.SerializedCompany;
+import com.ues.crm_backend.Models.ContactPerson.SerializedContactPerson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CompanyRepository{
@@ -20,28 +22,56 @@ public class CompanyRepository{
     }
 
     public Company getCompanyById(Long companyId) {
-        return companyRepository.getCompanyById(companyId);
+        SerializedCompany serializedCompany = companyRepository.getCompanyById(companyId);
+
+        if(serializedCompany == null) return null;
+
+        return new Company(serializedCompany);
     }
 
     public List<Company> getAllCompanies() {
-        return companyRepository.getAllCompanies();
+        List<SerializedCompany> serializedCompanies = companyRepository.getAllCompanies();
+
+        if(serializedCompanies == null) return null;
+
+        List<Company> companies = new ArrayList<>();
+        for (SerializedCompany company : serializedCompanies) {
+            companies.add(new Company(company));
+        }
+
+        return companies;
     }
 
     public void addNewCompany(Company company){
-        companyRepository.save(company);
+        companyRepository.save(new SerializedCompany(company));
+    }
+
+    @Transactional
+    public void addNoteToCompany(Long companyId, String note){
+        SerializedCompany serializedCompany = companyRepository.getCompanyById(companyId);
+
+        if (serializedCompany == null) return;
+
+        serializedCompany.addNewNote(note);
+
+        companyRepository.updateCompanyNotes(companyId, serializedCompany.getNotes());
     }
 
     @Transactional
     public void patchCompany(Long companyId, Company company){
-        companyRepository.patchCompany(companyId, company.getName(), company.getKindOfActivity(),
-                company.getConsumptionVolume(), company.getGeneratingCapacity(), company.getINN(),
-                company.getKPP(), company.getOKPO(), company.getEmail(), company.getPhone(),
-                company.getCreatorId(), company.getChangerId(), company.getNotes());
+        SerializedCompany serCompany = new SerializedCompany(company);
+
+        companyRepository.patchCompany(companyId, serCompany.getName(), serCompany.getKindOfActivity(),
+                serCompany.getConsumptionVolume(), serCompany.getGeneratingCapacity(), serCompany.getINN(),
+                serCompany.getKPP(), serCompany.getOKPO(), serCompany.getEmail(), serCompany.getPhone(),
+                serCompany.getCreatorId(), serCompany.getChangerId(), serCompany.getNotes());
     }
 
     public void deleteCompany(Long companyId){
-        Company company = this.getCompanyById(companyId);
+        SerializedCompany serializedCompany = companyRepository.getCompanyById(companyId);
 
-        companyRepository.delete(company);
+        if(serializedCompany == null) return;
+
+        companyRepository.delete(serializedCompany);
     }
 }

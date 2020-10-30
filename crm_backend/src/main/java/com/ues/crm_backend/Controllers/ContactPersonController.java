@@ -1,8 +1,7 @@
 package com.ues.crm_backend.Controllers;
 
-import com.ues.crm_backend.DataBase.Repositories.ContactPesonRepository;
-import com.ues.crm_backend.Models.Company;
-import com.ues.crm_backend.Models.ContactPerson;
+import com.ues.crm_backend.DataBase.Repositories.ContactPersonRepository;
+import com.ues.crm_backend.Models.ContactPerson.ContactPerson;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,47 +11,47 @@ import java.util.List;
 @RestController
 public class ContactPersonController {
 
-    private final ContactPesonRepository contactPesonRepository;
+    private final ContactPersonRepository contactPersonRepository;
 
-    public ContactPersonController(ContactPesonRepository contactPesonRepository){
-        this.contactPesonRepository = contactPesonRepository;
+    public ContactPersonController(ContactPersonRepository contactPersonRepository){
+        this.contactPersonRepository = contactPersonRepository;
     }
 
-    @GetMapping(value = "/contacts/{id}")
+    @GetMapping(value = "api/contacts/{id}")
     public ResponseEntity<ContactPerson> getContactPersonById(@PathVariable(name = "id") Long id){
-        ContactPerson contactPerson = contactPesonRepository.getContactPersonById(id);
+        ContactPerson contactPerson = contactPersonRepository.getContactPersonById(id);
 
         return contactPerson != null
                 ? new ResponseEntity<>(contactPerson, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/contacts/company/{id}")
+    @GetMapping(value = "api/contacts/company/{id}")
     public ResponseEntity<List<ContactPerson>> getAllContactPersonByCompanyId(@PathVariable(name = "id") Long id){
-        List<ContactPerson> contactPersons = contactPesonRepository.getAllContactPersonByCompanyId(id);
+        List<ContactPerson> contactPersons = contactPersonRepository.getAllContactPersonByCompanyId(id);
 
         return contactPersons != null && !contactPersons.isEmpty()
                 ? new ResponseEntity<>(contactPersons, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping(value = "/contacts")
+    @PostMapping(value = "api/contacts")
     public ResponseEntity<?> addNewContact(@RequestBody ContactPerson contactPerson){
-        contactPesonRepository.addNewContact(contactPerson);
+        contactPersonRepository.addNewContact(contactPerson);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping(value = "/contacts/{id}")
-    public ResponseEntity<?> patchContactPersonNotes(@PathVariable(name = "id") Long personId, @RequestParam String notes){
-        contactPesonRepository.patchContactPersonNotes(personId, notes);
+    @PostMapping(value = "api/contacts/{id}")
+    public ResponseEntity<?> addNoteToContactPerson(@PathVariable(name = "id") Long personId, @RequestParam String note){
+        contactPersonRepository.addNoteToContactPerson(personId, note);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/contacts/{id}")
+    @DeleteMapping(value = "api/contacts/{id}")
     public ResponseEntity<?> deleteContactPerson(@PathVariable(name = "id") Long id){
-        contactPesonRepository.deleteContactPerson(id);
+        contactPersonRepository.deleteContactPerson(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -1,10 +1,10 @@
-package com.ues.crm_backend.Models;
+package com.ues.crm_backend.Models.Company;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "company")
-public class Company {
+public class SerializedCompany {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,23 +34,32 @@ public class Company {
     @Column(name = "company_note")
     private String notes;
 
-    public Company() {}
+    public SerializedCompany() {}
 
-    public Company(Long companyId, String name, String kindOfActivity, Long consumptionVolume, boolean generatingCapacity, Long INN,
-                   Long KPP, Long OKPO, String email, Long phone, Long creatorId, Long changerId, String notes){
-        this.companyId = companyId;
-        this.name = name;
-        this.kindOfActivity = kindOfActivity;
-        this.consumptionVolume = consumptionVolume;
-        this.generatingCapacity = generatingCapacity;
-        this.INN = INN;
-        this.KPP = KPP;
-        this.OKPO = OKPO;
-        this.email = email;
-        this.phone = phone;
-        this.creatorId = creatorId;
-        this.changerId = changerId;
-        this.notes = notes;
+    public SerializedCompany(Company company){
+        this.companyId = company.getCompanyId();
+        this.name = company.getName();
+        this.kindOfActivity = company.getKindOfActivity();
+        this.consumptionVolume = company.getConsumptionVolume();
+        this.generatingCapacity = company.getGeneratingCapacity();
+        this.INN = company.getINN();
+        this.KPP = company.getKPP();
+        this.OKPO = company.getOKPO();
+        this.email = company.getEmail();
+        this.phone = company.getPhone();
+        this.creatorId = company.getCreatorId();
+        this.changerId = company.getChangerId();
+
+        StringBuilder builder = new StringBuilder();
+        for(String note : company.getNotes()) {
+            builder.append(note);
+            builder.append('¥');
+        }
+        this.notes = builder.deleteCharAt(builder.length() - 1).toString();
+    }
+
+    public void addNewNote(String newNote){
+        setNotes(notes + "¥" + newNote);
     }
 
     public Long getCompanyId() {

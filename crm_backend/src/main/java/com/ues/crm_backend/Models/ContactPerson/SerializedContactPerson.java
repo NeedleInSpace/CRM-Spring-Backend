@@ -1,10 +1,12 @@
-package com.ues.crm_backend.Models;
+package com.ues.crm_backend.Models.ContactPerson;
+
+import com.ues.crm_backend.Models.ContactPerson.ContactPerson;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "contact_person")
-public class ContactPerson{
+public class SerializedContactPerson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,30 @@ public class ContactPerson{
     @Column(name = "last_updater_id")
     private Long lastUpdaterId;
 
-    public ContactPerson() {}
+    public SerializedContactPerson() {}
+
+    public SerializedContactPerson(ContactPerson contactPerson){
+        this.contactPersonId = contactPerson.getContactPersonId();
+        this.contactName = contactPerson.getContactName();
+        this.companyId = contactPerson.getCompanyId();
+        this.position = contactPerson.getPosition();
+        this.makeDecision = contactPerson.getMakeDecision();
+        this.email = contactPerson.getEmail();
+
+        StringBuilder builder = new StringBuilder();
+        for(String note : contactPerson.getNotes()) {
+            builder.append(note);
+            builder.append('¥');
+        }
+        this.notes = builder.deleteCharAt(builder.length() - 1).toString();
+
+        this.creatorId = contactPerson.getCreatorId();
+        this.lastUpdaterId = contactPerson.getLastUpdaterId();
+    }
+
+    public void addNewNote(String newNote){
+        setNotes(notes + "¥" + newNote);
+    }
 
     public Long getContactPersonId() {
         return contactPersonId;

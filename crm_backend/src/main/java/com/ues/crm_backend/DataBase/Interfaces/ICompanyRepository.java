@@ -1,6 +1,7 @@
 package com.ues.crm_backend.DataBase.Interfaces;
 
-import com.ues.crm_backend.Models.Company;
+import com.ues.crm_backend.Models.Company.Company;
+import com.ues.crm_backend.Models.Company.SerializedCompany;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,14 +9,19 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ICompanyRepository extends JpaRepository<Company, Long>{
+public interface ICompanyRepository extends JpaRepository<SerializedCompany, Long>{
 
 
     @Query(value = "SELECT * FROM company WHERE company_id = :companyId", nativeQuery = true)
-    Company getCompanyById(@Param("companyId") Long companyId);
+    SerializedCompany getCompanyById(@Param("companyId") Long companyId);
 
     @Query(value = "SELECT * FROM company", nativeQuery = true)
-    List<Company> getAllCompanies();
+    List<SerializedCompany> getAllCompanies();
+
+    @Modifying
+    @Query(value = "UPDATE company SET company_note = :notes " +
+            "WHERE company_id  = :companyId", nativeQuery = true)
+    void updateCompanyNotes(@Param("companyId") Long companyId, @Param("notes") String notes);
 
     @Modifying
     @Query(value = "UPDATE company SET company_name = :name, company_occupation = :kindOfActivity," +
