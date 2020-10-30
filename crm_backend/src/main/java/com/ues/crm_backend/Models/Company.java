@@ -34,7 +34,7 @@ public class Company {
     @Column(name = "company_note")
     private String notes;
 
-    public Company(){}
+    public Company() {}
 
     public Company(Long companyId, String name, String kindOfActivity, Long consumptionVolume, boolean generatingCapacity, Long INN,
                    Long KPP, Long OKPO, String email, Long phone, Long creatorId, Long changerId, String notes){

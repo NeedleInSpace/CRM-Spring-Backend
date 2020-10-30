@@ -21,7 +21,8 @@ public interface ICompanyRepository extends JpaRepository<Company, Long>{
     @Query(value = "UPDATE company SET company_name = :name, company_occupation = :kindOfActivity," +
             "consumption_volume_id = :consumptionVolume, generating_capacity = :generatingCapacity, inn = :INN, " +
             "kpp = :KPP, okpo = :OKPO, email = :email, phone = :phone, creator_id = :creatorId, " +
-            "last_updater_id = :changerId, company_note  = :notes WHERE company_id = :companyId", nativeQuery = true)
+            "last_updater_id = :changerId, company_note  = :notes " +
+            "WHERE company_id = :companyId", nativeQuery = true)
     void patchCompany(@Param("companyId") Long companyId, @Param("name") String name,
                                @Param("kindOfActivity") String kindOfActivity, @Param("consumptionVolume") Long consumptionVolume,
                                @Param("generatingCapacity") boolean generatingCapacity, @Param("INN") Long INN,
