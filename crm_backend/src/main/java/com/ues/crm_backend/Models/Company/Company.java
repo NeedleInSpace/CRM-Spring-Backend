@@ -18,6 +18,8 @@ public class Company {
     private Long changerId;
     private String[] notes;
 
+    public Company() {}
+
     public Company(SerializedCompany serializedCompany){
         this.companyId = serializedCompany.getCompanyId();
         this.name = serializedCompany.getName();
@@ -32,7 +34,10 @@ public class Company {
         this.creatorId = serializedCompany.getCreatorId();
         this.changerId = serializedCompany.getChangerId();
 
-        this.notes = serializedCompany.getNotes().split("¥");
+        if (serializedCompany.getNotes() == null){
+            this.notes = null;
+        }
+        else this.notes = serializedCompany.getNotes().split("¥");
     }
 
     public Long getCompanyId() {

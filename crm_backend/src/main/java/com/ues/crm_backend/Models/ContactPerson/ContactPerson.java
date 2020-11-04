@@ -12,6 +12,8 @@ public class ContactPerson{
     private Long creatorId;
     private Long lastUpdaterId;
 
+    public ContactPerson() {}
+
     public ContactPerson(SerializedContactPerson serializedContactPerson){
         this.contactPersonId = serializedContactPerson.getContactPersonId();
         this.contactName = serializedContactPerson.getContactName();
@@ -20,7 +22,10 @@ public class ContactPerson{
         this.makeDecision = serializedContactPerson.getMakeDecision();
         this.email = serializedContactPerson.getEmail();
 
-        this.notes = serializedContactPerson.getNotes().split("¥");
+        if (serializedContactPerson.getNotes() == null){
+            this.notes = null;
+        }
+        else this.notes = serializedContactPerson.getNotes().split("¥");
 
         this.creatorId = serializedContactPerson.getCreatorId();
         this.lastUpdaterId = serializedContactPerson.getLastUpdaterId();

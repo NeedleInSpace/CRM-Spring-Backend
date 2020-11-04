@@ -50,12 +50,17 @@ public class SerializedCompany {
         this.creatorId = company.getCreatorId();
         this.changerId = company.getChangerId();
 
-        StringBuilder builder = new StringBuilder();
-        for(String note : company.getNotes()) {
-            builder.append(note);
-            builder.append('¥');
+        if (company.getNotes() == null){
+            this.notes = null;
         }
-        this.notes = builder.deleteCharAt(builder.length() - 1).toString();
+        else{
+            StringBuilder builder = new StringBuilder();
+            for(String note : company.getNotes()) {
+                builder.append(note);
+                builder.append('¥');
+            }
+            this.notes = builder.deleteCharAt(builder.length() - 1).toString();
+        }
     }
 
     public void addNewNote(String newNote){

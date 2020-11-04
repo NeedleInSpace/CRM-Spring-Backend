@@ -39,12 +39,17 @@ public class SerializedContactPerson {
         this.makeDecision = contactPerson.getMakeDecision();
         this.email = contactPerson.getEmail();
 
-        StringBuilder builder = new StringBuilder();
-        for(String note : contactPerson.getNotes()) {
-            builder.append(note);
-            builder.append('¥');
+        if (contactPerson.getNotes() == null){
+            this.notes = null;
         }
-        this.notes = builder.deleteCharAt(builder.length() - 1).toString();
+        else {
+            StringBuilder builder = new StringBuilder();
+            for(String note : contactPerson.getNotes()) {
+                builder.append(note);
+                builder.append('¥');
+            }
+            this.notes = builder.deleteCharAt(builder.length() - 1).toString();
+        }
 
         this.creatorId = contactPerson.getCreatorId();
         this.lastUpdaterId = contactPerson.getLastUpdaterId();
