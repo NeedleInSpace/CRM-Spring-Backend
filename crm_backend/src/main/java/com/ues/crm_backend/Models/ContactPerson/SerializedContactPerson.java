@@ -53,6 +53,7 @@ public class SerializedContactPerson {
 
         this.creatorId = contactPerson.getCreatorId();
         this.lastUpdaterId = contactPerson.getLastUpdaterId();
+
     }
 
     public void addNewNote(String newNote){
