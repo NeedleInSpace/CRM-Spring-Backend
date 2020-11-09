@@ -13,6 +13,9 @@ public interface IContactPersonRepository extends JpaRepository<SerializedContac
     @Query(value = "SELECT * FROM contact_person WHERE contact_id  = :personId", nativeQuery = true)
     SerializedContactPerson getContactPersonById(@Param("personId") Long personId);
 
+    @Query(value = "SELECT * FROM contact_person", nativeQuery = true)
+    List<SerializedContactPerson> getAllContacts();
+
     @Query(value = "SELECT * FROM contact_person WHERE contact_company_id  = :companyId", nativeQuery = true)
     List<SerializedContactPerson> getAllContactPersonByCompanyId(@Param("companyId") Long companyId);
 

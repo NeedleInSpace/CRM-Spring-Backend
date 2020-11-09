@@ -30,6 +30,16 @@ public class CompanyController {
     }
 
     @CrossOrigin
+    @GetMapping(value = "api/companyNamesWithId")
+    public ResponseEntity<List<Object[]>> getAllCompaniesNameAndId() {
+        List<Object[]> companies = companyRepository.getAllCompaniesNameAndId();
+
+        return companies != null && !companies.isEmpty()
+                ? new ResponseEntity<>(companies, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @CrossOrigin
     @GetMapping(value = "api/companies/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable(name = "id") Long id) {
         Company company = companyRepository.getCompanyById(id);

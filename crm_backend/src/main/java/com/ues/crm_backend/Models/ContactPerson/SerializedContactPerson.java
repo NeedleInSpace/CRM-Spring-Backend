@@ -1,7 +1,5 @@
 package com.ues.crm_backend.Models.ContactPerson;
 
-import com.ues.crm_backend.Models.ContactPerson.ContactPerson;
-
 import javax.persistence.*;
 
 @Entity
@@ -20,14 +18,20 @@ public class SerializedContactPerson {
     private String position;
     @Column(name = "make_decision")
     private boolean makeDecision;
-    @Column(name = "email")
-    private String email;
+    @Column(name = "main_email")
+    private String mainEmail;
+    @Column(name = "other_emails")
+    private String otherEmails;
     @Column(name = "contact_note")
     private String notes;
     @Column(name = "creator_id")
     private Long creatorId;
     @Column(name = "last_updater_id")
     private Long lastUpdaterId;
+    @Column(name = "main_phone")
+    private Long mainPhone;
+    @Column(name = "other_phones")
+    private String otherPhones;
 
     public SerializedContactPerson() {}
 
@@ -37,23 +41,32 @@ public class SerializedContactPerson {
         this.companyId = contactPerson.getCompanyId();
         this.position = contactPerson.getPosition();
         this.makeDecision = contactPerson.getMakeDecision();
-        this.email = contactPerson.getEmail();
 
-        if (contactPerson.getNotes() == null){
-            this.notes = null;
-        }
-        else {
-            StringBuilder builder = new StringBuilder();
-            for(String note : contactPerson.getNotes()) {
-                builder.append(note);
-                builder.append('¥');
-            }
-            this.notes = builder.deleteCharAt(builder.length() - 1).toString();
-        }
+        this.notes = contactPerson.getNotes() != null ? concatArray(contactPerson.getNotes()) : null;
+
+        this.mainEmail = contactPerson.getMainEmail();
+        this.otherEmails = contactPerson.getOtherEmails() != null ? concatArray(contactPerson.getOtherEmails()) : null;
 
         this.creatorId = contactPerson.getCreatorId();
         this.lastUpdaterId = contactPerson.getLastUpdaterId();
+        this.mainPhone = contactPerson.getMainPhone();
 
+        this.otherPhones = contactPerson.getOtherPhones() != null ? concatArray(contactPerson.getOtherPhones()) : null;
+    }
+
+    private String concatArray(String[] array){
+        if (array.length == 0){
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder();
+
+        for(String note : array) {
+            builder.append(note);
+            builder.append('¥');
+        }
+
+        return builder.deleteCharAt(builder.length() - 1).toString();
     }
 
     public void addNewNote(String newNote){
@@ -95,11 +108,18 @@ public class SerializedContactPerson {
         this.makeDecision = makeDecision;
     }
 
-    public String getEmail() {
-        return email;
+    public String getMainEmail() {
+        return mainEmail;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setMainEmail(String mainEmail) {
+        this.mainEmail = mainEmail;
+    }
+
+    public String getOtherEmails() {
+        return otherEmails;
+    }
+    public void setOtherEmails(String otherEmails) {
+        this.otherEmails = otherEmails;
     }
 
     public String getNotes() {
@@ -121,5 +141,19 @@ public class SerializedContactPerson {
     }
     public void setLastUpdaterId(Long lastUpdaterId) {
         this.lastUpdaterId = lastUpdaterId;
+    }
+
+    public Long getMainPhone() {
+        return mainPhone;
+    }
+    public void setMainPhone(Long mainPhone) {
+        this.mainPhone = mainPhone;
+    }
+
+    public String getOtherPhones() {
+        return otherPhones;
+    }
+    public void setOtherPhones(String otherPhones) {
+        this.otherPhones = otherPhones;
     }
 }

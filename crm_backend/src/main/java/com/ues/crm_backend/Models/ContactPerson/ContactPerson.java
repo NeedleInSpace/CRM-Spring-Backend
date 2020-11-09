@@ -7,28 +7,37 @@ public class ContactPerson{
     private Long companyId;
     private String position;
     private boolean makeDecision;
-    private String email;
+    private String mainEmail;
+    private String[] otherEmails;
     private String[] notes;
     private Long creatorId;
     private Long lastUpdaterId;
+    private Long mainPhone;
+    private String[] otherPhones;
 
     public ContactPerson() {}
 
-    public ContactPerson(SerializedContactPerson serializedContactPerson){
-        this.contactPersonId = serializedContactPerson.getContactPersonId();
-        this.contactName = serializedContactPerson.getContactName();
-        this.companyId = serializedContactPerson.getCompanyId();
-        this.position = serializedContactPerson.getPosition();
-        this.makeDecision = serializedContactPerson.getMakeDecision();
-        this.email = serializedContactPerson.getEmail();
+    public ContactPerson(SerializedContactPerson serContactPerson){
+        this.contactPersonId = serContactPerson.getContactPersonId();
+        this.contactName = serContactPerson.getContactName();
+        this.companyId = serContactPerson.getCompanyId();
+        this.position = serContactPerson.getPosition();
+        this.makeDecision = serContactPerson.getMakeDecision();
 
-        if (serializedContactPerson.getNotes() == null){
-            this.notes = null;
-        }
-        else this.notes = serializedContactPerson.getNotes().split("¥");
+        this.notes = serContactPerson.getNotes() != null ? splitString(serContactPerson.getNotes()) : null;
 
-        this.creatorId = serializedContactPerson.getCreatorId();
-        this.lastUpdaterId = serializedContactPerson.getLastUpdaterId();
+        this.mainEmail = serContactPerson.getMainEmail();
+        this.otherEmails = serContactPerson.getOtherEmails() != null ? splitString(serContactPerson.getOtherEmails()) : null;
+
+        this.creatorId = serContactPerson.getCreatorId();
+        this.lastUpdaterId = serContactPerson.getLastUpdaterId();
+        this.mainPhone = serContactPerson.getMainPhone();
+
+        this.otherPhones = serContactPerson.getOtherPhones() != null ? splitString(serContactPerson.getOtherPhones()) : null;
+    }
+
+    private String[] splitString(String string){
+        return string.split("¥");
     }
 
     public Long getContactPersonId() {
@@ -46,8 +55,11 @@ public class ContactPerson{
     public boolean getMakeDecision(){
         return makeDecision;
     }
-    public String getEmail() {
-        return email;
+    public String getMainEmail() {
+        return mainEmail;
+    }
+    public String[] getOtherEmails() {
+        return otherEmails;
     }
     public String[] getNotes() {
         return notes;
@@ -57,5 +69,11 @@ public class ContactPerson{
     }
     public Long getLastUpdaterId() {
         return lastUpdaterId;
+    }
+    public Long getMainPhone() {
+        return mainPhone;
+    }
+    public String[] getOtherPhones() {
+        return otherPhones;
     }
 }

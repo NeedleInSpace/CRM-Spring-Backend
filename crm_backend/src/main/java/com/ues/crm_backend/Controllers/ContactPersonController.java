@@ -18,6 +18,16 @@ public class ContactPersonController {
     }
 
     @CrossOrigin
+    @GetMapping(value = "api/contacts")
+    public ResponseEntity<List<ContactPerson>> getAllContacts(){
+        List<ContactPerson> contactPersons = contactPersonRepository.getAllContacts();
+
+        return contactPersons != null && !contactPersons.isEmpty()
+                ? new ResponseEntity<>(contactPersons, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @CrossOrigin
     @GetMapping(value = "api/contacts/{id}")
     public ResponseEntity<ContactPerson> getContactPersonById(@PathVariable(name = "id") Long id){
         ContactPerson contactPerson = contactPersonRepository.getContactPersonById(id);

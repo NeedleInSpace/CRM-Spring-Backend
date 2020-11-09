@@ -3,7 +3,6 @@ package com.ues.crm_backend.DataBase.Repositories;
 import com.ues.crm_backend.DataBase.Interfaces.ICompanyRepository;
 import com.ues.crm_backend.Models.Company.Company;
 import com.ues.crm_backend.Models.Company.SerializedCompany;
-import com.ues.crm_backend.Models.ContactPerson.SerializedContactPerson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +41,19 @@ public class CompanyRepository{
         return companies;
     }
 
+    public List<Object[]> getAllCompaniesNameAndId() {
+        List<Object[]> serializedRows = companyRepository.getAllCompaniesNameAndId();
+
+        if(serializedRows == null) return null;
+
+        /*List<Company> resultRows = new ArrayList<>();
+        for (Object[] row : serializedRows) {
+            companies.add(new Company(company));
+        }*/
+
+        return serializedRows;
+    }
+
     public void addNewCompany(Company company){
         companyRepository.save(new SerializedCompany(company));
     }
@@ -61,9 +73,9 @@ public class CompanyRepository{
     public void patchCompany(Long companyId, Company company){
         SerializedCompany serCompany = new SerializedCompany(company);
 
-        companyRepository.patchCompany(companyId, serCompany.getName(), serCompany.getKindOfActivity(),
-                serCompany.getConsumptionVolume(), serCompany.getGeneratingCapacity(), serCompany.getINN(),
-                serCompany.getKPP(), serCompany.getOKPO(), serCompany.getEmail(), serCompany.getPhone(),
+        companyRepository.patchCompany(companyId, serCompany.getName(), serCompany.getFullName(), serCompany.getKindOfActivity(),
+                serCompany.getConsumptionVolume(), serCompany.getGeneratingCapacity(), serCompany.getInn(),
+                serCompany.getKpp(), serCompany.getOkpo(), serCompany.getEmail(), serCompany.getPhone(),
                 serCompany.getCreatorId(), serCompany.getChangerId(), serCompany.getNotes());
     }
 

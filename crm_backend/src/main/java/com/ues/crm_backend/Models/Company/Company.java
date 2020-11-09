@@ -1,17 +1,16 @@
 package com.ues.crm_backend.Models.Company;
 
-import javax.persistence.*;
-
 
 public class Company {
     private Long companyId;
     private String name;
+    private String fullName;
     private String kindOfActivity;
     private Long consumptionVolume;
     private boolean generatingCapacity;
-    private Long INN;
-    private Long KPP;
-    private Long OKPO;
+    private Long inn;
+    private Long kpp;
+    private Long okpo;
     private String email;
     private Long phone;
     private Long creatorId;
@@ -23,12 +22,13 @@ public class Company {
     public Company(SerializedCompany serializedCompany){
         this.companyId = serializedCompany.getCompanyId();
         this.name = serializedCompany.getName();
+        this.fullName = serializedCompany.getFullName();
         this.kindOfActivity = serializedCompany.getKindOfActivity();
         this.consumptionVolume = serializedCompany.getConsumptionVolume();
         this.generatingCapacity = serializedCompany.getGeneratingCapacity();
-        this.INN = serializedCompany.getINN();
-        this.KPP = serializedCompany.getKPP();
-        this.OKPO = serializedCompany.getOKPO();
+        this.inn = serializedCompany.getInn();
+        this.kpp = serializedCompany.getKpp();
+        this.okpo = serializedCompany.getOkpo();
         this.email = serializedCompany.getEmail();
         this.phone = serializedCompany.getPhone();
         this.creatorId = serializedCompany.getCreatorId();
@@ -46,6 +46,9 @@ public class Company {
     public String getName() {
         return name;
     }
+    public String getFullName() {
+        return fullName;
+    }
     public String getKindOfActivity() {
         return kindOfActivity;
     }
@@ -55,14 +58,14 @@ public class Company {
     public boolean getGeneratingCapacity() {
         return generatingCapacity;
     }
-    public Long getINN() {
-        return INN;
+    public Long getInn() {
+        return inn;
     }
-    public Long getKPP() {
-        return KPP;
+    public Long getKpp() {
+        return kpp;
     }
-    public Long getOKPO() {
-        return OKPO;
+    public Long getOkpo() {
+        return okpo;
     }
     public String getEmail() {
         return email;

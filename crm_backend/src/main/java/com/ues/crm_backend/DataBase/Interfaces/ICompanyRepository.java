@@ -18,18 +18,22 @@ public interface ICompanyRepository extends JpaRepository<SerializedCompany, Lon
     @Query(value = "SELECT * FROM company", nativeQuery = true)
     List<SerializedCompany> getAllCompanies();
 
+    @Query(value = "SELECT company_name, company_id FROM company", nativeQuery = true)
+    List<Object[]> getAllCompaniesNameAndId();
+
     @Modifying
     @Query(value = "UPDATE company SET company_note = :notes " +
             "WHERE company_id  = :companyId", nativeQuery = true)
     void updateCompanyNotes(@Param("companyId") Long companyId, @Param("notes") String notes);
 
     @Modifying
-    @Query(value = "UPDATE company SET company_name = :name, company_occupation = :kindOfActivity," +
+    @Query(value = "UPDATE company SET company_name = :name, company_full_name = :fullName" +
+            "company_occupation = :kindOfActivity," +
             "consumption_volume_id = :consumptionVolume, generating_capacity = :generatingCapacity, inn = :INN, " +
             "kpp = :KPP, okpo = :OKPO, email = :email, phone = :phone, creator_id = :creatorId, " +
             "last_updater_id = :changerId, company_note  = :notes " +
             "WHERE company_id = :companyId", nativeQuery = true)
-    void patchCompany(@Param("companyId") Long companyId, @Param("name") String name,
+    void patchCompany(@Param("companyId") Long companyId, @Param("name") String name, @Param("fullName") String fullName,
                                @Param("kindOfActivity") String kindOfActivity, @Param("consumptionVolume") Long consumptionVolume,
                                @Param("generatingCapacity") boolean generatingCapacity, @Param("INN") Long INN,
                                @Param("KPP")Long KPP, @Param("OKPO") Long OKPO, @Param("email")String email,

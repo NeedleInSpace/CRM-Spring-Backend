@@ -11,6 +11,8 @@ public class SerializedCompany {
     private Long companyId;
     @Column(name = "company_name")
     private String name;
+    @Column(name = "company_full_name")
+    private String fullName;
     @Column(name = "company_occupation")
     private String kindOfActivity;
     @Column(name = "consumption_volume_id")
@@ -18,11 +20,11 @@ public class SerializedCompany {
     @Column(name = "generating_capacity")
     private boolean generatingCapacity;
     @Column(name = "inn")
-    private Long INN;
+    private Long inn;
     @Column(name = "kpp")
-    private Long KPP;
+    private Long kpp;
     @Column(name = "okpo")
-    private Long OKPO;
+    private Long okpo;
     @Column(name = "email")
     private String email;
     @Column(name = "phone")
@@ -39,12 +41,13 @@ public class SerializedCompany {
     public SerializedCompany(Company company){
         this.companyId = company.getCompanyId();
         this.name = company.getName();
+        this.fullName = company.getFullName();
         this.kindOfActivity = company.getKindOfActivity();
         this.consumptionVolume = company.getConsumptionVolume();
         this.generatingCapacity = company.getGeneratingCapacity();
-        this.INN = company.getINN();
-        this.KPP = company.getKPP();
-        this.OKPO = company.getOKPO();
+        this.inn = company.getInn();
+        this.kpp = company.getKpp();
+        this.okpo = company.getOkpo();
         this.email = company.getEmail();
         this.phone = company.getPhone();
         this.creatorId = company.getCreatorId();
@@ -81,6 +84,13 @@ public class SerializedCompany {
         this.name = name;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public String getKindOfActivity() {
         return kindOfActivity;
     }
@@ -102,25 +112,25 @@ public class SerializedCompany {
         this.generatingCapacity = generatingCapacity;
     }
 
-    public Long getINN() {
-        return INN;
+    public Long getInn() {
+        return inn;
     }
-    public void setINN(Long INN) {
-        this.INN = INN;
-    }
-
-    public Long getKPP() {
-        return KPP;
-    }
-    public void setKPP(Long KPP) {
-        this.KPP = KPP;
+    public void setInn(Long inn) {
+        this.inn = inn;
     }
 
-    public Long getOKPO() {
-        return OKPO;
+    public Long getKpp() {
+        return kpp;
     }
-    public void setOKPO(Long OKPO) {
-        this.OKPO = OKPO;
+    public void setKpp(Long kpp) {
+        this.kpp = kpp;
+    }
+
+    public Long getOkpo() {
+        return okpo;
+    }
+    public void setOkpo(Long okpo) {
+        this.okpo = okpo;
     }
 
     public String getEmail() {
