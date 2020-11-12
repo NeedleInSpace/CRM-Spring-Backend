@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api")
 public class ProjectController {
@@ -24,31 +23,36 @@ public class ProjectController {
 
     @GetMapping("/projects")
     public ResponseEntity<List<Project>> getAllProjects() {
-        List<Project> projects = projectRepository.getAllProjects();
-
-        return projects != null && !projects.isEmpty()
-                ? new ResponseEntity<>(projects, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            List<Project> projects = projectRepository.getAllProjects();
+            return new ResponseEntity<>(projects, HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
     @GetMapping("/projects/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable(name = "id") Long id){
-        Project project = projectRepository.getProject(id);
-        return project != null
-                ? new ResponseEntity<>(project, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            Project project = projectRepository.getProject(id);
+            return new ResponseEntity<>(project, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
 
     @PostMapping("/projects")
     public ResponseEntity<?> addNewProject(@RequestBody Project project) {
-        project.setStartDate(new Date());
-        project.setStagesNumber(0);
-        project.setMemberNumber(0);
-        Project createdProject = projectRepository.addNewProject(project);
-        return createdProject != null
-                ? new ResponseEntity<>(createdProject, HttpStatus.CREATED)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            project.setStartDate(new Date());
+            project.setStagesNumber(0);
+            project.setMemberNumber(0);
+            Project createdProject = projectRepository.addNewProject(project);
+            return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PatchMapping("/projects")
@@ -57,7 +61,7 @@ public class ProjectController {
             projectRepository.patchProject(project);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -68,7 +72,7 @@ public class ProjectController {
             projectRepository.deleteProject(id);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api")
 public class StageController {
@@ -23,12 +22,12 @@ public class StageController {
     @GetMapping("/stages/project/{id}")
     public ResponseEntity<List<Stage>> getStages(@PathVariable(name = "id") Long id)
     {
-        List<Stage> projectStages = stageRepository.getProjectStages(id);
-
-        return projectStages != null && !projectStages.isEmpty()
-                ? new ResponseEntity<>(projectStages, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
+        try {
+            List<Stage> projectStages = stageRepository.getProjectStages(id);
+            return new ResponseEntity<>(projectStages, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/stages")
@@ -37,7 +36,7 @@ public class StageController {
             Stage createdStage = stageRepository.addNewStage(newStage);
             return  new ResponseEntity<>(createdStage, HttpStatus.CREATED);
         } catch (Exception e ){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -47,7 +46,7 @@ public class StageController {
             stageRepository.patchStage(stage);
             return new ResponseEntity<>( HttpStatus.OK);
         } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -57,7 +56,7 @@ public class StageController {
             stageRepository.deleteStageById(stageId);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
