@@ -19,7 +19,7 @@ public class Employee {
     @Column(name = "employee_login")
     private String username;
 
-    @Column(name = "employee_pas")
+    @Column(name = "employee_hash_pas")
     private String password;
 
     @ManyToOne
