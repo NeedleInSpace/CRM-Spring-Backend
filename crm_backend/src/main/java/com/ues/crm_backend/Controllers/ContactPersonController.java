@@ -22,9 +22,7 @@ public class ContactPersonController {
     public ResponseEntity<List<ContactPerson>> getAllContacts(){
         List<ContactPerson> contactPersons = contactPersonRepository.getAllContacts();
 
-        return contactPersons != null && !contactPersons.isEmpty()
-                ? new ResponseEntity<>(contactPersons, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(contactPersons, HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -32,9 +30,7 @@ public class ContactPersonController {
     public ResponseEntity<ContactPerson> getContactPersonById(@PathVariable(name = "id") Long id){
         ContactPerson contactPerson = contactPersonRepository.getContactPersonById(id);
 
-        return contactPerson != null
-                ? new ResponseEntity<>(contactPerson, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(contactPerson, HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -42,9 +38,7 @@ public class ContactPersonController {
     public ResponseEntity<List<ContactPerson>> getAllContactPersonByCompanyId(@PathVariable(name = "id") Long id){
         List<ContactPerson> contactPersons = contactPersonRepository.getAllContactPersonByCompanyId(id);
 
-        return contactPersons != null && !contactPersons.isEmpty()
-                ? new ResponseEntity<>(contactPersons, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(contactPersons, HttpStatus.OK);
     }
 
     @CrossOrigin

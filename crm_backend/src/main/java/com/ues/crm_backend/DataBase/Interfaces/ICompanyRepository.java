@@ -27,7 +27,7 @@ public interface ICompanyRepository extends JpaRepository<SerializedCompany, Lon
     void updateCompanyNotes(@Param("companyId") Long companyId, @Param("notes") String notes);
 
     @Modifying
-    @Query(value = "UPDATE company SET company_name = :name, company_full_name = :fullName" +
+    @Query(value = "UPDATE company SET company_name = :name, company_full_name = :fullName," +
             "company_occupation = :kindOfActivity," +
             "consumption_volume_id = :consumptionVolume, generating_capacity = :generatingCapacity, inn = :INN, " +
             "kpp = :KPP, okpo = :OKPO, email = :email, phone = :phone, creator_id = :creatorId, " +

@@ -24,9 +24,7 @@ public class CompanyController {
     public ResponseEntity<List<Company>> getAllCompanies() {
         List<Company> companies = companyRepository.getAllCompanies();
 
-        return companies != null && !companies.isEmpty()
-                ? new ResponseEntity<>(companies, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(companies, HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -34,9 +32,7 @@ public class CompanyController {
     public ResponseEntity<List<Object[]>> getAllCompaniesNameAndId() {
         List<Object[]> companies = companyRepository.getAllCompaniesNameAndId();
 
-        return companies != null && !companies.isEmpty()
-                ? new ResponseEntity<>(companies, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(companies, HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -44,9 +40,7 @@ public class CompanyController {
     public ResponseEntity<Company> getCompanyById(@PathVariable(name = "id") Long id) {
         Company company = companyRepository.getCompanyById(id);
 
-        return company != null
-                ? new ResponseEntity<>(company, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(company, HttpStatus.OK);
     }
 
     @CrossOrigin

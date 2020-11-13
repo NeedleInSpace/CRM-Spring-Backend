@@ -67,7 +67,10 @@ public class SerializedCompany {
     }
 
     public void addNewNote(String newNote){
-        setNotes(notes + "¥" + newNote);
+        if (notes == null){
+            notes = newNote;
+        }
+        else setNotes(notes + "¥" + newNote);
     }
 
     public Long getCompanyId() {
