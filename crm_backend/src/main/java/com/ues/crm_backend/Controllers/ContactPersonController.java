@@ -17,7 +17,6 @@ public class ContactPersonController {
         this.contactPersonRepository = contactPersonRepository;
     }
 
-    @CrossOrigin
     @GetMapping(value = "api/contacts")
     public ResponseEntity<List<ContactPerson>> getAllContacts(){
         List<ContactPerson> contactPersons = contactPersonRepository.getAllContacts();
@@ -25,7 +24,6 @@ public class ContactPersonController {
         return new ResponseEntity<>(contactPersons, HttpStatus.OK);
     }
 
-    @CrossOrigin
     @GetMapping(value = "api/contacts/{id}")
     public ResponseEntity<ContactPerson> getContactPersonById(@PathVariable(name = "id") Long id){
         ContactPerson contactPerson = contactPersonRepository.getContactPersonById(id);
@@ -33,7 +31,6 @@ public class ContactPersonController {
         return new ResponseEntity<>(contactPerson, HttpStatus.OK);
     }
 
-    @CrossOrigin
     @GetMapping(value = "api/contacts/company/{id}")
     public ResponseEntity<List<ContactPerson>> getAllContactPersonByCompanyId(@PathVariable(name = "id") Long id){
         List<ContactPerson> contactPersons = contactPersonRepository.getAllContactPersonByCompanyId(id);
@@ -41,7 +38,6 @@ public class ContactPersonController {
         return new ResponseEntity<>(contactPersons, HttpStatus.OK);
     }
 
-    @CrossOrigin
     @PostMapping(value = "api/contacts")
     public ResponseEntity<?> addNewContact(@RequestBody ContactPerson contactPerson){
         contactPersonRepository.addNewContact(contactPerson);
@@ -49,7 +45,6 @@ public class ContactPersonController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @CrossOrigin
     @PostMapping(value = "api/contacts/{id}")
     public ResponseEntity<?> addNoteToContactPerson(@PathVariable(name = "id") Long personId, @RequestParam String note){
         contactPersonRepository.addNoteToContactPerson(personId, note);
@@ -57,7 +52,6 @@ public class ContactPersonController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @CrossOrigin
     @DeleteMapping(value = "api/contacts/{id}")
     public ResponseEntity<?> deleteContactPerson(@PathVariable(name = "id") Long id){
         contactPersonRepository.deleteContactPerson(id);
