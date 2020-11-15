@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ContactPersonController {
@@ -35,6 +36,15 @@ public class ContactPersonController {
     public ResponseEntity<List<ContactPerson>> getAllContactPersonByCompanyId(@PathVariable(name = "id") Long id){
         List<ContactPerson> contactPersons = contactPersonRepository.getAllContactPersonByCompanyId(id);
 
+        return new ResponseEntity<>(contactPersons, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "api/search/contacts")
+    public ResponseEntity<List<ContactPerson>> getSuitable(@RequestParam String name){
+        List<ContactPerson> contactPersons = contactPersonRepository.getAllContacts();
+        contactPersons = contactPersons.stream()
+                .filter((contactPerson)->contactPerson.getContactName().contains(name))
+                .collect(Collectors.toList());
         return new ResponseEntity<>(contactPersons, HttpStatus.OK);
     }
 

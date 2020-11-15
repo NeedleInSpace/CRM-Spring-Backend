@@ -1,10 +1,15 @@
 package com.ues.crm_backend.Models.ContactPerson;
 
+import com.ues.crm_backend.Models.Company.Company;
+import com.ues.crm_backend.Models.Company.SerializedCompany;
+
 public class ContactPerson{
 
     private Long contactPersonId;
     private String contactName;
     private Long companyId;
+    private Company company;
+    private String companyName;
     private String position;
     private boolean makeDecision;
     private String mainEmail;
@@ -21,6 +26,7 @@ public class ContactPerson{
         this.contactPersonId = serContactPerson.getContactPersonId();
         this.contactName = serContactPerson.getContactName();
         this.companyId = serContactPerson.getCompanyId();
+        this.company = serContactPerson.getCompany();
         this.position = serContactPerson.getPosition();
         this.makeDecision = serContactPerson.getMakeDecision();
 
@@ -47,7 +53,13 @@ public class ContactPerson{
         return contactName;
     }
     public Long getCompanyId() {
-        return companyId;
+        return this.companyId;
+    }
+    public SerializedCompany getCompany() {
+        if (this.company != null)
+            return new SerializedCompany(this.company);
+        else
+            return null;
     }
     public String getPosition() {
         return position;
@@ -75,5 +87,13 @@ public class ContactPerson{
     }
     public String[] getOtherPhones() {
         return otherPhones;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }

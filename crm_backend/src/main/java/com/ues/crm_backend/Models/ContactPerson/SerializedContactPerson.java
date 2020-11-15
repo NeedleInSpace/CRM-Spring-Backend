@@ -1,5 +1,8 @@
 package com.ues.crm_backend.Models.ContactPerson;
 
+import com.ues.crm_backend.Models.Company.Company;
+import com.ues.crm_backend.Models.Company.SerializedCompany;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +17,9 @@ public class SerializedContactPerson {
     private String contactName;
     @Column(name = "contact_company_id")
     private Long companyId;
+    @ManyToOne
+    @JoinColumn(name = "contact_company_id", insertable = false, updatable = false)
+    private SerializedCompany company;
     @Column(name = "contact_position")
     private String position;
     @Column(name = "make_decision")
@@ -39,6 +45,7 @@ public class SerializedContactPerson {
         this.contactPersonId = contactPerson.getContactPersonId();
         this.contactName = contactPerson.getContactName();
         this.companyId = contactPerson.getCompanyId();
+        this.company = contactPerson.getCompany();
         this.position = contactPerson.getPosition();
         this.makeDecision = contactPerson.getMakeDecision();
 
@@ -88,10 +95,19 @@ public class SerializedContactPerson {
     }
 
     public Long getCompanyId() {
-        return companyId;
+        return this.companyId;
     }
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Company getCompany() {
+        if (this.company != null)
+            return new Company(this.company);
+        else return null;
+    }
+    public void setCompany(SerializedCompany company) {
+        this.company = company;
     }
 
     public String getPosition() {

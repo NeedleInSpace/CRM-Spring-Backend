@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class CompanyController {
@@ -17,6 +18,15 @@ public class CompanyController {
     @Autowired
     public CompanyController(CompanyRepository companyRepository){
         this.companyRepository = companyRepository;
+    }
+
+    @GetMapping(value = "api/search/companies")
+    public ResponseEntity<List<Company>> getSuitable(@RequestParam String name){
+        List<Company> companies = companyRepository.getAllCompanies();
+        if(companies != null)
+            companies = companies.stream().filter((company)->company.getFullName().contains(name)).collect(Collectors.toList());
+        return new ResponseEntity<>(companies, HttpStatus.OK);
+
     }
 
     @GetMapping(value = "api/companies")
