@@ -3,6 +3,7 @@ package com.ues.crm_backend.Controllers;
 import com.ues.crm_backend.DataBase.Interfaces.EmployeeRepository;
 import com.ues.crm_backend.Models.AuthenticationRequestDTD;
 import com.ues.crm_backend.Models.Employee;
+import com.ues.crm_backend.Models.Token;
 import com.ues.crm_backend.security.JWTTokenProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,10 +41,11 @@ public class AuthRestController {
            UsernamePasswordAuthenticationToken uuu = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
            authenticationManager.authenticate(uuu);
            Employee employee = employeeRepository.findByUsername(request.getUsername()).orElseThrow(()-> new UsernameNotFoundException("User doesn't exists"));
-           String token = jwtTokenProvider.createToken(request.getUsername(), employee.getRole().getRole());
+           Token token = new Token(request.getUsername(), employee.getRole().getRole(), this.jwtTokenProvider);
+           Token.Alltokens.add(token);
            Map<Object, Object> response = new HashMap<>();
            response.put("name", employee.getName());
-           response.put("token", token);
+           response.put("token", token.getToken());
            return ResponseEntity.ok(response);
        }catch (AuthenticationException e){
            return new ResponseEntity<>("Invalid username or password", HttpStatus.FORBIDDEN);
@@ -53,5 +56,19 @@ public class AuthRestController {
     public void logout(HttpServletRequest request, HttpServletResponse response){
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
+    }
+
+    @PostMapping("/token")
+    public ResponseEntity<?> validateToken(@RequestBody String request){
+        try{
+            Token token = Token.findTokenByRequest(request.replace('}',' ').replace('"',' ').split(":")[1].trim());
+            Map<Object, Object> response = new HashMap<>();
+            response.put("token", token.getToken());
+            return token.checkSession()
+                    ? ResponseEntity.ok(response)
+                    : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (NullPointerException e){
+            return new ResponseEntity<>("Token not found", HttpStatus.FORBIDDEN);
+        }
     }
 }
