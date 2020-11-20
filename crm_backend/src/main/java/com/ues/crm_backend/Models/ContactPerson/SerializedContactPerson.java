@@ -5,10 +5,20 @@ import com.ues.crm_backend.Models.Company.SerializedCompany;
 
 import javax.persistence.*;
 
+/**
+ * Сериализуемы класс модели SerializedContactPerson.
+ *
+ * Причины наличия двух классов для одной модели - читать в readme.
+ *
+ * @see com.ues.crm_backend.Models.ContactPerson.ContactPerson;
+ */
 @Entity
 @Table(name = "contact_person")
 public class SerializedContactPerson {
 
+    /**
+     * Все поля являются отображением столбцов из таблицы contact_person.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "contact_id")
@@ -41,6 +51,10 @@ public class SerializedContactPerson {
 
     public SerializedContactPerson() {}
 
+    /**
+     * Конструктор, создающий экземпляр SerializedContactPerson на основе объекта ContactPerson.
+     * @param contactPerson - сериализуемая версия SerializedContactPerson.
+     */
     public SerializedContactPerson(ContactPerson contactPerson){
         this.contactPersonId = contactPerson.getContactPersonId();
         this.contactName = contactPerson.getContactName();
@@ -61,6 +75,7 @@ public class SerializedContactPerson {
         this.otherPhones = contactPerson.getOtherPhones() != null ? concatArray(contactPerson.getOtherPhones()) : null;
     }
 
+    /** Метод для конкатенации массива в строку с разделителем */
     private String concatArray(String[] array){
         if (array.length == 0){
             return null;
@@ -83,22 +98,13 @@ public class SerializedContactPerson {
     public Long getContactPersonId() {
         return contactPersonId;
     }
-    public void setContactPersonId(Long contactPersonId) {
-        this.contactPersonId = contactPersonId;
-    }
 
     public String getContactName() {
         return contactName;
     }
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
 
     public Long getCompanyId() {
         return this.companyId;
-    }
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
     }
 
     public Company getCompany() {
@@ -106,36 +112,21 @@ public class SerializedContactPerson {
             return new Company(this.company);
         else return null;
     }
-    public void setCompany(SerializedCompany company) {
-        this.company = company;
-    }
 
     public String getPosition() {
         return position;
-    }
-    public void setPosition(String position) {
-        this.position = position;
     }
 
     public boolean getMakeDecision() {
         return makeDecision;
     }
-    public void setMakeDecision(boolean makeDecision) {
-        this.makeDecision = makeDecision;
-    }
 
     public String getMainEmail() {
         return mainEmail;
     }
-    public void setMainEmail(String mainEmail) {
-        this.mainEmail = mainEmail;
-    }
 
     public String getOtherEmails() {
         return otherEmails;
-    }
-    public void setOtherEmails(String otherEmails) {
-        this.otherEmails = otherEmails;
     }
 
     public String getNotes() {
@@ -148,28 +139,16 @@ public class SerializedContactPerson {
     public Long getCreatorId() {
         return creatorId;
     }
-    public void setCreatorId(Long creatorId) {
-        this.creatorId = creatorId;
-    }
 
     public Long getLastUpdaterId() {
         return lastUpdaterId;
-    }
-    public void setLastUpdaterId(Long lastUpdaterId) {
-        this.lastUpdaterId = lastUpdaterId;
     }
 
     public Long getMainPhone() {
         return mainPhone;
     }
-    public void setMainPhone(Long mainPhone) {
-        this.mainPhone = mainPhone;
-    }
 
     public String getOtherPhones() {
         return otherPhones;
-    }
-    public void setOtherPhones(String otherPhones) {
-        this.otherPhones = otherPhones;
     }
 }

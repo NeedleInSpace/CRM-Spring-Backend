@@ -2,10 +2,26 @@ package com.ues.crm_backend.Models.Company;
 
 import javax.persistence.*;
 
+/**
+ * Сериализуемый класс модели company.
+ *
+ * Т.к. JpaRepository не умеет конвертировать List<Company> в массивы от postgres,
+ *   то приходится вводить промежуточный класс SerializedCompany.
+ * Перед сохранением в БД все массивы конкатенируются в единую строку с разделителем '¥' и только потом записываются.
+ * При извлечении происходит тот же процесс, но уже в обратную сторону.
+ *
+ * Т.е. Company - класс, с которым происходят все взаимодействия в коде (на frontend отправляется именно он),
+ *  SerializedCompany - класс, использующийся только для взаимодействия с БД.
+ *
+ * @see com.ues.crm_backend.Models.Company.Company;
+ */
 @Entity
 @Table(name = "company")
 public class SerializedCompany {
 
+    /**
+     * Все поля являются отображением столбцов из таблицы company.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long companyId;
@@ -38,6 +54,10 @@ public class SerializedCompany {
 
     public SerializedCompany() {}
 
+    /**
+     * Конструктор, создающий экземпляр SerializedCompany на основе объекта Company.
+     * @param company - стандартная версия Company.
+     */
     public SerializedCompany(Company company){
         this.companyId = company.getCompanyId();
         this.name = company.getName();
@@ -66,6 +86,7 @@ public class SerializedCompany {
         }
     }
 
+    /** Метод, добавляющий новую заметку */
     public void addNewNote(String newNote){
         if (notes == null){
             notes = newNote;

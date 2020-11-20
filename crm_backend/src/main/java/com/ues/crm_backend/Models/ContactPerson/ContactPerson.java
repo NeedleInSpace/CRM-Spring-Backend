@@ -3,8 +3,19 @@ package com.ues.crm_backend.Models.ContactPerson;
 import com.ues.crm_backend.Models.Company.Company;
 import com.ues.crm_backend.Models.Company.SerializedCompany;
 
+/**
+ * Класс модели ContactPerson.
+ *
+ * Причины наличия двух классов для одной модели - читать в readme.
+ *
+ * @see com.ues.crm_backend.Models.ContactPerson.SerializedContactPerson;
+ */
 public class ContactPerson{
 
+    /**
+     * Все поля являются отображением полей из SerializedContactPerson.
+     * @see com.ues.crm_backend.Models.ContactPerson.SerializedContactPerson;
+     */
     private Long contactPersonId;
     private String contactName;
     private Long companyId;
@@ -22,6 +33,10 @@ public class ContactPerson{
 
     public ContactPerson() {}
 
+    /**
+     * Конструктор, создающий экземпляр ContactPerson на основе объекта SerializedContactPerson.
+     * @param serContactPerson - сериализуемая версия ContactPerson.
+     */
     public ContactPerson(SerializedContactPerson serContactPerson){
         this.contactPersonId = serContactPerson.getContactPersonId();
         this.contactName = serContactPerson.getContactName();
@@ -42,6 +57,7 @@ public class ContactPerson{
         this.otherPhones = serContactPerson.getOtherPhones() != null ? splitString(serContactPerson.getOtherPhones()) : null;
     }
 
+    /** Приватный метод для сплита строки в массив по разделителю */
     private String[] splitString(String string){
         return string.split("¥");
     }

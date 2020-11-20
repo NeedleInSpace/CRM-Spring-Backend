@@ -1,7 +1,24 @@
 package com.ues.crm_backend.Models.Company;
 
-
+/**
+ * Класс модели company.
+ *
+ * Т.к. JpaRepository не умеет конвертировать List<Company> в массивы от postgres,
+ *   то приходится вводить промежуточный класс SerializedCompany.
+ * Перед сохранением в БД все массивы конкатенируются в единую строку с разделителем '¥' и только потом записываются.
+ * При извлечении происходит тот же процесс, но уже в обратную сторону.
+ *
+ * Т.е. Company - класс, с которым происходят все взаимодействия в коде (на frontend отправляется именно он),
+ *   SerializedCompany - класс, использующийся только для взаимодействия с БД.
+ *
+ * @see com.ues.crm_backend.Models.Company.SerializedCompany;
+ */
 public class Company {
+
+    /**
+     * Все поля являются отображением полей из SerializedCompany.
+     * @see com.ues.crm_backend.Models.Company.SerializedCompany;
+     */
     private Long companyId;
     private String name;
     private String fullName;
@@ -19,6 +36,10 @@ public class Company {
 
     public Company() {}
 
+    /**
+     * Конструктор, создающий экземпляр Company на основе объекта SerializedCompany.
+     * @param serializedCompany - сериализуемая версия Company.
+     */
     public Company(SerializedCompany serializedCompany){
         this.companyId = serializedCompany.getCompanyId();
         this.name = serializedCompany.getName();
