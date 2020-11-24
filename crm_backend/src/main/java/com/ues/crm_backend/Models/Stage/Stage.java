@@ -15,9 +15,9 @@ public class Stage {
 
     @Column(name = "stage_name")
     String stageName;
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    Project project;
+
+    @Column(name = "project_id")
+    Long projectId;
 
     @Column(name = "stage_result")
     String result;
@@ -38,8 +38,8 @@ public class Stage {
         return stageName;
     }
 
-    public Project getProject() {
-        return project;
+    public Long getProjectId() {
+        return projectId;
     }
 
     public String getResult() {
@@ -54,7 +54,7 @@ public class Stage {
         return stageNumber;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProject(Long projectId) {
+        this.projectId = projectId;
     }
 }

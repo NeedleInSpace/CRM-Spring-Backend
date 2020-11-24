@@ -26,9 +26,8 @@ public class StageRepository {
     @Transactional
     public Stage addNewStage(Stage stage) throws Exception {
         try{
-            Project project = iProjectRepository.findProjectById(stage.getProject().getId());
+            Project project = iProjectRepository.findProjectById(stage.getProjectId());
             project.setStagesNumber(project.getStagesNumber()+1);
-            stage.setProject(project);
             return iStageRepository.save(stage);
         }catch (Exception e){
             throw new Exception("NotFound");
@@ -45,7 +44,7 @@ public class StageRepository {
     public void deleteStageById(Long id) throws Exception {
         try {
             Stage stage = iStageRepository.findStageById(id);
-            Project project = stage.getProject();
+            Project project = iProjectRepository.findProjectById(stage.getProjectId());
             project.setStagesNumber(project.getStagesNumber()-1);
             iStageRepository.delete(stage);
         }catch (Exception e){
