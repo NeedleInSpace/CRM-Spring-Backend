@@ -26,11 +26,11 @@ public class Token {
 
     public boolean checkSession() {
         Date presentDate = new Date();
-        if (presentDate.getTime() - lastDate.getTime() > 2*60000) {
+        if (presentDate.getTime() - lastDate.getTime() > 15*60000) {
             Alltokens.remove(findTokenByRequest(this.token));
             return false;
         }
-        if (presentDate.getTime() - lastDate.getTime() > 1*60000) {
+        if (presentDate.getTime() - lastDate.getTime() > 10*60000) {
             resetToken();
         }
         this.lastDate = presentDate;

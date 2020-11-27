@@ -43,8 +43,12 @@ public class AuthRestController {
            Employee employee = employeeRepository.findByUsername(request.getUsername()).orElseThrow(()-> new UsernameNotFoundException("User doesn't exists"));
            Token token = new Token(request.getUsername(), employee.getRole().getRole(), this.jwtTokenProvider);
            Token.Alltokens.add(token);
+           //Map<Object, Object> response = new HashMap<>();
+           //response.put("name", employee.getName());
+           //response.put("token", token.getToken());
+           //return ResponseEntity.ok(response);
            Map<Object, Object> response = new HashMap<>();
-           response.put("name", employee.getName());
+           response.put("employee", employee);
            response.put("token", token.getToken());
            return ResponseEntity.ok(response);
        }catch (AuthenticationException e){
@@ -53,9 +57,8 @@ public class AuthRestController {
     }
 
     @PostMapping("/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response){
-        SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
-        securityContextLogoutHandler.logout(request, response, null);
+    public void logout(@RequestBody String request, HttpServletResponse response){
+        Token.Alltokens.remove(Token.findTokenByRequest(request));
     }
 
     @PostMapping("/token")
