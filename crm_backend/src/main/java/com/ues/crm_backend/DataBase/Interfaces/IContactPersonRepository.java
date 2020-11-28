@@ -8,14 +8,44 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * Интерфейс для непосредственного взаимодейстаия с таблицей contact_person в БД.
+ * (Большинство стандартных операций уже реализовано в JpaRepository<Класс_конвертируемого_объекта, Тип_PK>)
+ *
+ * Модель ContactPerson:
+ * @see com.ues.crm_backend.Models.ContactPerson.ContactPerson;
+ */
 public interface IContactPersonRepository extends JpaRepository<SerializedContactPerson, Long> {
 
+    /**
+     * Запрос для получения контактного лица по id.
+     * @param personId - id контактного лица.
+     * @return контактное лицо.
+     */
     @Query(value = "SELECT * FROM contact_person WHERE contact_id  = :personId", nativeQuery = true)
     SerializedContactPerson getContactPersonById(@Param("personId") Long personId);
 
+    /**
+     * Запрос для получения всех контактных лиц.
+     * @return Список всех контактных лиц.
+     */
+    @Query(value = "SELECT * FROM contact_person", nativeQuery = true)
+    List<SerializedContactPerson> getAllContacts();
+
+    /**
+     * Запрос для получения всех контактных лиц из компании.
+     * @param companyId - id компании.
+     * @return список контактных лиц.
+     */
     @Query(value = "SELECT * FROM contact_person WHERE contact_company_id  = :companyId", nativeQuery = true)
     List<SerializedContactPerson> getAllContactPersonByCompanyId(@Param("companyId") Long companyId);
 
+
+    /**
+     * Запрос для обновления списка заметок у контактного лица.
+     * @param personId - id контактного лица.
+     * @param notes - новый список заметок.
+     */
     @Modifying
     @Query(value = "UPDATE contact_person SET contact_note = :notes " +
             "WHERE contact_id  = :personId", nativeQuery = true)

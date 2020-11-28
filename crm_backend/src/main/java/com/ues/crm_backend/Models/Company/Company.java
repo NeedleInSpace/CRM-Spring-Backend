@@ -1,38 +1,64 @@
 package com.ues.crm_backend.Models.Company;
 
-import javax.persistence.*;
-
-
+/**
+ * Класс модели company.
+ *
+ * Т.к. JpaRepository не умеет конвертировать List<Company> в массивы от postgres,
+ *   то приходится вводить промежуточный класс SerializedCompany.
+ * Перед сохранением в БД все массивы конкатенируются в единую строку с разделителем '¥' и только потом записываются.
+ * При извлечении происходит тот же процесс, но уже в обратную сторону.
+ *
+ * Т.е. Company - класс, с которым происходят все взаимодействия в коде (на frontend отправляется именно он),
+ *   SerializedCompany - класс, использующийся только для взаимодействия с БД.
+ *
+ * @see com.ues.crm_backend.Models.Company.SerializedCompany;
+ */
 public class Company {
+
+    /**
+     * Все поля являются отображением полей из SerializedCompany.
+     * @see com.ues.crm_backend.Models.Company.SerializedCompany;
+     */
     private Long companyId;
     private String name;
+    private String fullName;
     private String kindOfActivity;
     private Long consumptionVolume;
     private boolean generatingCapacity;
-    private Long INN;
-    private Long KPP;
-    private Long OKPO;
+    private Long inn;
+    private Long kpp;
+    private Long okpo;
     private String email;
     private Long phone;
     private Long creatorId;
     private Long changerId;
     private String[] notes;
 
+    public Company() {}
+
+    /**
+     * Конструктор, создающий экземпляр Company на основе объекта SerializedCompany.
+     * @param serializedCompany - сериализуемая версия Company.
+     */
     public Company(SerializedCompany serializedCompany){
         this.companyId = serializedCompany.getCompanyId();
         this.name = serializedCompany.getName();
+        this.fullName = serializedCompany.getFullName();
         this.kindOfActivity = serializedCompany.getKindOfActivity();
         this.consumptionVolume = serializedCompany.getConsumptionVolume();
         this.generatingCapacity = serializedCompany.getGeneratingCapacity();
-        this.INN = serializedCompany.getINN();
-        this.KPP = serializedCompany.getKPP();
-        this.OKPO = serializedCompany.getOKPO();
+        this.inn = serializedCompany.getInn();
+        this.kpp = serializedCompany.getKpp();
+        this.okpo = serializedCompany.getOkpo();
         this.email = serializedCompany.getEmail();
         this.phone = serializedCompany.getPhone();
         this.creatorId = serializedCompany.getCreatorId();
         this.changerId = serializedCompany.getChangerId();
 
-        this.notes = serializedCompany.getNotes().split("¥");
+        if (serializedCompany.getNotes() == null){
+            this.notes = null;
+        }
+        else this.notes = serializedCompany.getNotes().split("¥");
     }
 
     public Long getCompanyId() {
@@ -40,6 +66,9 @@ public class Company {
     }
     public String getName() {
         return name;
+    }
+    public String getFullName() {
+        return fullName;
     }
     public String getKindOfActivity() {
         return kindOfActivity;
@@ -50,14 +79,14 @@ public class Company {
     public boolean getGeneratingCapacity() {
         return generatingCapacity;
     }
-    public Long getINN() {
-        return INN;
+    public Long getInn() {
+        return inn;
     }
-    public Long getKPP() {
-        return KPP;
+    public Long getKpp() {
+        return kpp;
     }
-    public Long getOKPO() {
-        return OKPO;
+    public Long getOkpo() {
+        return okpo;
     }
     public String getEmail() {
         return email;
