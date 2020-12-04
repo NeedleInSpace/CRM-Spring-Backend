@@ -116,4 +116,14 @@ public class ContactPersonRepository {
 
         contactPersonRepository.delete(serializedContactPerson);
     }
+
+    @Transactional
+    public void patchContactPerson(Long contactId, ContactPerson contact){
+        SerializedContactPerson serContact = new SerializedContactPerson(contact);
+
+        contactPersonRepository.patchContactPerson(contactId, serContact.getContactName(), serContact.getCompanyId(),
+                serContact.getPosition(), serContact.getMakeDecision(), serContact.getMainEmail(),
+                serContact.getOtherEmails(), serContact.getNotes(), serContact.getCreatorId(),
+                serContact.getLastUpdaterId(), serContact.getMainPhone(), serContact.getOtherPhones());
+    }
 }

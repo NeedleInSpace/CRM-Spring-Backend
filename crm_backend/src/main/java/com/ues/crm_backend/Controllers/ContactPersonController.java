@@ -1,6 +1,7 @@
 package com.ues.crm_backend.Controllers;
 
 import com.ues.crm_backend.DataBase.Repositories.ContactPersonRepository;
+import com.ues.crm_backend.Models.Company.Company;
 import com.ues.crm_backend.Models.ContactPerson.ContactPerson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -110,6 +111,13 @@ public class ContactPersonController {
     @DeleteMapping(value = "api/contacts/{id}")
     public ResponseEntity<?> deleteContactPerson(@PathVariable(name = "id") Long id){
         contactPersonRepository.deleteContactPerson(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "api/contacts/{id}")
+    public ResponseEntity<?> patchCompany(@PathVariable(name = "id") Long id, @RequestBody ContactPerson contact){
+        contactPersonRepository.patchContactPerson(id, contact);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
