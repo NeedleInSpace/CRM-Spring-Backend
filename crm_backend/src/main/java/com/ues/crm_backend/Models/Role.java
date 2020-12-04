@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+/** Модель роли пользователя*/
 @Entity
 @Table(name = "employee_role")
 public class Role {
@@ -25,6 +25,7 @@ public class Role {
         return role;
     }
 
+    /** Функция получения привилегий */
     public  Set<SimpleGrantedAuthority> getAuthorities(){
         SimpleGrantedAuthority sga = new SimpleGrantedAuthority(role);
         Set<SimpleGrantedAuthority> set = new HashSet<>();

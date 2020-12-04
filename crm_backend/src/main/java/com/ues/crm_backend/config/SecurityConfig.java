@@ -41,25 +41,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").hasAnyAuthority("ADMIN", "MANAGER", "DIRECTOR")
                 .antMatchers("/api/auth/login").permitAll()
+                .antMatchers("/api/auth/logout").permitAll()
                 .antMatchers("/api/auth/token").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .apply(jwtConfigurer);
-                /*.formLogin()
-                .loginPage("/auth/login").permitAll()
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/auth/login");*/
     }
 
-   /* @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuthenticationProvider());
-    }*/
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -69,12 +58,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
-
-    /*@Bean
-    protected DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-        return daoAuthenticationProvider;
-    }*/
 }
