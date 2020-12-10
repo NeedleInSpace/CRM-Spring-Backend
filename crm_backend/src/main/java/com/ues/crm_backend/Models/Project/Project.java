@@ -1,5 +1,7 @@
 package com.ues.crm_backend.Models.Project;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -24,6 +26,7 @@ public class Project {
     @Column(name ="member_number")
     private int memberNumber;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name ="start_date")
     private Date startDate;
 

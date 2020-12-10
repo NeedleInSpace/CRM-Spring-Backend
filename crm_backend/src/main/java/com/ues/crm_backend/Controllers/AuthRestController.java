@@ -42,19 +42,19 @@ public class AuthRestController {
      * @return пользователя и его токен*/
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDTD request){
-       try{
-           UsernamePasswordAuthenticationToken uuu = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
-           authenticationManager.authenticate(uuu);
-           Employee employee = employeeRepository.findByUsername(request.getUsername()).orElseThrow(()-> new UsernameNotFoundException("User doesn't exists"));
-           Token token = new Token(request.getUsername(), employee.getRole().getRole(), this.jwtTokenProvider);
-           Token.Alltokens.add(token);
-           Map<Object, Object> response = new HashMap<>();
-           response.put("employee", employee);
-           response.put("token", token.getToken());
-           return ResponseEntity.ok(response);
-       }catch (AuthenticationException e){
-           return new ResponseEntity<>("Invalid username or password", HttpStatus.FORBIDDEN);
-       }
+        try{
+            UsernamePasswordAuthenticationToken uuu = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
+            authenticationManager.authenticate(uuu);
+            Employee employee = employeeRepository.findByUsername(request.getUsername()).orElseThrow(()-> new UsernameNotFoundException("User doesn't exists"));
+            Token token = new Token(request.getUsername(), employee.getRole().getRole(), this.jwtTokenProvider);
+            Token.Alltokens.add(token);
+            Map<Object, Object> response = new HashMap<>();
+            response.put("employee", employee);
+            response.put("token", token.getToken());
+            return ResponseEntity.ok(response);
+        }catch (AuthenticationException e){
+            return new ResponseEntity<>("Invalid username or password", HttpStatus.FORBIDDEN);
+        }
     }
 
     /** Эндпоинт для выхода из аккаунта
@@ -76,10 +76,8 @@ public class AuthRestController {
     public ResponseEntity<?> validateToken(@RequestBody String request){
         try{
             Token token = Token.findTokenByRequest(request.replace("=",""));
-            Map<Object, Object> response = new HashMap<>();
-            response.put("token", token.getToken());
             return token.checkSession()
-                    ? ResponseEntity.ok(response)
+                    ? new ResponseEntity<>(token.getToken(), HttpStatus.OK)
                     : new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }catch (NullPointerException e){
             return new ResponseEntity<>("Token not found", HttpStatus.FORBIDDEN);
