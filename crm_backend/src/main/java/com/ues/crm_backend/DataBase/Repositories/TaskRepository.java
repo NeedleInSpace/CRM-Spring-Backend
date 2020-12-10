@@ -3,6 +3,7 @@ package com.ues.crm_backend.DataBase.Repositories;
 import com.ues.crm_backend.DataBase.Interfaces.EmployeeRepository;
 import com.ues.crm_backend.DataBase.Interfaces.ICompanyRepository;
 import com.ues.crm_backend.DataBase.Interfaces.ITaskRepository;
+import com.ues.crm_backend.Models.Employee;
 import com.ues.crm_backend.Models.Task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskRepository {
@@ -42,7 +44,7 @@ public class TaskRepository {
     }
 
     public List<Task> getTasksByDate(String username, Date date) {
-        Long employeeId = employeeRepository.findByUsername(username).get().getId();
+        Long employeeId = employeeRepository.getEmployeeIdByName(username);
         return taskRepository.getTasksByDate(employeeId, date);
     }
 
