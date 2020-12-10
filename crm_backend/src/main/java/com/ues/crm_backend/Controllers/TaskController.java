@@ -33,9 +33,9 @@ public class TaskController {
     }
 
     @GetMapping(value = "api/employee/tasks")
-    public ResponseEntity<List<Task>> getEmployeeTasksByDate(@RequestParam Long employeeId, @RequestParam Date date) {
+    public ResponseEntity<List<Task>> getEmployeeTasksByDate(@RequestParam String username, @RequestParam Date date) {
         try {
-            List<Task> tasks = taskRepository.getTasksByDate(employeeId, date);
+            List<Task> tasks = taskRepository.getTasksByDate(username, date);
             return new ResponseEntity<>(tasks, HttpStatus.OK);
         } catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

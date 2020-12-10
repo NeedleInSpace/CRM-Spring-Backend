@@ -1,5 +1,6 @@
 package com.ues.crm_backend.DataBase.Repositories;
 
+import com.ues.crm_backend.DataBase.Interfaces.EmployeeRepository;
 import com.ues.crm_backend.DataBase.Interfaces.ICompanyRepository;
 import com.ues.crm_backend.DataBase.Interfaces.ITaskRepository;
 import com.ues.crm_backend.Models.Task.Task;
@@ -15,6 +16,8 @@ public class TaskRepository {
 
     @Autowired
     ITaskRepository taskRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     public List<Task> getAllEmployeeTasks(Long id) {
         return taskRepository.getAllEmployeeTasks(id);
@@ -38,7 +41,8 @@ public class TaskRepository {
         }
     }
 
-    public List<Task> getTasksByDate(Long employeeId, Date date) {
+    public List<Task> getTasksByDate(String username, Date date) {
+        Long employeeId = employeeRepository.findByUsername(username).get().getId();
         return taskRepository.getTasksByDate(employeeId, date);
     }
 
