@@ -50,4 +50,16 @@ public interface IContactPersonRepository extends JpaRepository<SerializedContac
     @Query(value = "UPDATE contact_person SET contact_note = :notes " +
             "WHERE contact_id  = :personId", nativeQuery = true)
     void updateContactPersonNotes(@Param("personId") Long personId, @Param("notes") String notes);
+
+    @Modifying
+    @Query(value = "UPDATE contact_person SET contact_name = :contactName, contact_company_id = :companyId," +
+            "contact_position = :position, make_decision = :makeDecision, main_email = :mainEmail, " +
+            "other_emails = :otherEmails, contact_note = :notes, creator_id = :creatorId, " +
+            "last_updater_id = :lastUpdaterId, main_phone = :mainPhone, other_phones = :otherPhones " +
+            "WHERE contact_id  = :contactPersonId", nativeQuery = true)
+    void patchContactPerson(@Param("contactPersonId") Long contactPersonId, @Param("contactName") String contactName, @Param("companyId") Long companyId,
+                      @Param("position") String position, @Param("makeDecision") boolean makeDecision,
+                      @Param("mainEmail") String mainEmail, @Param("otherEmails") String otherEmails,
+                      @Param("notes")String notes, @Param("creatorId") Long creatorId, @Param("lastUpdaterId")Long lastUpdaterId,
+                      @Param("mainPhone")Long mainPhone, @Param("otherPhones") String otherPhones);
 }
