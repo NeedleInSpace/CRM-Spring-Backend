@@ -1,13 +1,24 @@
 package com.ues.crm_backend.Models.ContactPerson;
 
-import com.ues.crm_backend.Models.ContactPerson.ContactPerson;
+import com.ues.crm_backend.Models.Company.Company;
+import com.ues.crm_backend.Models.Company.SerializedCompany;
 
 import javax.persistence.*;
 
+/**
+ * Сериализуемы класс модели SerializedContactPerson.
+ *
+ * Причины наличия двух классов для одной модели - читать в readme.
+ *
+ * @see com.ues.crm_backend.Models.ContactPerson.ContactPerson;
+ */
 @Entity
 @Table(name = "contact_person")
 public class SerializedContactPerson {
 
+    /**
+     * Все поля являются отображением столбцов из таблицы contact_person.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "contact_id")
@@ -16,38 +27,68 @@ public class SerializedContactPerson {
     private String contactName;
     @Column(name = "contact_company_id")
     private Long companyId;
+    @ManyToOne
+    @JoinColumn(name = "contact_company_id", insertable = false, updatable = false)
+    private SerializedCompany company;
     @Column(name = "contact_position")
     private String position;
     @Column(name = "make_decision")
     private boolean makeDecision;
-    @Column(name = "email")
-    private String email;
+    @Column(name = "main_email")
+    private String mainEmail;
+    @Column(name = "other_emails")
+    private String otherEmails;
     @Column(name = "contact_note")
     private String notes;
     @Column(name = "creator_id")
     private Long creatorId;
     @Column(name = "last_updater_id")
     private Long lastUpdaterId;
+    @Column(name = "main_phone")
+    private Long mainPhone;
+    @Column(name = "other_phones")
+    private String otherPhones;
 
     public SerializedContactPerson() {}
 
+    /**
+     * Конструктор, создающий экземпляр SerializedContactPerson на основе объекта ContactPerson.
+     * @param contactPerson - сериализуемая версия SerializedContactPerson.
+     */
     public SerializedContactPerson(ContactPerson contactPerson){
         this.contactPersonId = contactPerson.getContactPersonId();
         this.contactName = contactPerson.getContactName();
         this.companyId = contactPerson.getCompanyId();
+        this.company = contactPerson.getCompany();
         this.position = contactPerson.getPosition();
         this.makeDecision = contactPerson.getMakeDecision();
-        this.email = contactPerson.getEmail();
 
-        StringBuilder builder = new StringBuilder();
-        for(String note : contactPerson.getNotes()) {
-            builder.append(note);
-            builder.append('¥');
-        }
-        this.notes = builder.deleteCharAt(builder.length() - 1).toString();
+        this.notes = contactPerson.getNotes() != null ? concatArray(contactPerson.getNotes()) : null;
+
+        this.mainEmail = contactPerson.getMainEmail();
+        this.otherEmails = contactPerson.getOtherEmails() != null ? concatArray(contactPerson.getOtherEmails()) : null;
 
         this.creatorId = contactPerson.getCreatorId();
         this.lastUpdaterId = contactPerson.getLastUpdaterId();
+        this.mainPhone = contactPerson.getMainPhone();
+
+        this.otherPhones = contactPerson.getOtherPhones() != null ? concatArray(contactPerson.getOtherPhones()) : null;
+    }
+
+    /** Метод для конкатенации массива в строку с разделителем */
+    private String concatArray(String[] array){
+        if (array.length == 0){
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder();
+
+        for(String note : array) {
+            builder.append(note);
+            builder.append('¥');
+        }
+
+        return builder.deleteCharAt(builder.length() - 1).toString();
     }
 
     public void addNewNote(String newNote){
@@ -57,43 +98,35 @@ public class SerializedContactPerson {
     public Long getContactPersonId() {
         return contactPersonId;
     }
-    public void setContactPersonId(Long contactPersonId) {
-        this.contactPersonId = contactPersonId;
-    }
 
     public String getContactName() {
         return contactName;
     }
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
 
     public Long getCompanyId() {
-        return companyId;
+        return this.companyId;
     }
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+
+    public Company getCompany() {
+        if (this.company != null)
+            return new Company(this.company);
+        else return null;
     }
 
     public String getPosition() {
         return position;
     }
-    public void setPosition(String position) {
-        this.position = position;
-    }
 
     public boolean getMakeDecision() {
         return makeDecision;
     }
-    public void setMakeDecision(boolean makeDecision) {
-        this.makeDecision = makeDecision;
+
+    public String getMainEmail() {
+        return mainEmail;
     }
 
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
+    public String getOtherEmails() {
+        return otherEmails;
     }
 
     public String getNotes() {
@@ -106,14 +139,16 @@ public class SerializedContactPerson {
     public Long getCreatorId() {
         return creatorId;
     }
-    public void setCreatorId(Long creatorId) {
-        this.creatorId = creatorId;
-    }
 
     public Long getLastUpdaterId() {
         return lastUpdaterId;
     }
-    public void setLastUpdaterId(Long lastUpdaterId) {
-        this.lastUpdaterId = lastUpdaterId;
+
+    public Long getMainPhone() {
+        return mainPhone;
+    }
+
+    public String getOtherPhones() {
+        return otherPhones;
     }
 }

@@ -2,15 +2,33 @@ package com.ues.crm_backend.Models.Company;
 
 import javax.persistence.*;
 
+/**
+ * Сериализуемый класс модели company.
+ *
+ * Т.к. JpaRepository не умеет конвертировать List<Company> в массивы от postgres,
+ *   то приходится вводить промежуточный класс SerializedCompany.
+ * Перед сохранением в БД все массивы конкатенируются в единую строку с разделителем '¥' и только потом записываются.
+ * При извлечении происходит тот же процесс, но уже в обратную сторону.
+ *
+ * Т.е. Company - класс, с которым происходят все взаимодействия в коде (на frontend отправляется именно он),
+ *  SerializedCompany - класс, использующийся только для взаимодействия с БД.
+ *
+ * @see com.ues.crm_backend.Models.Company.Company;
+ */
 @Entity
 @Table(name = "company")
 public class SerializedCompany {
 
+    /**
+     * Все поля являются отображением столбцов из таблицы company.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long companyId;
     @Column(name = "company_name")
     private String name;
+    @Column(name = "company_full_name")
+    private String fullName;
     @Column(name = "company_occupation")
     private String kindOfActivity;
     @Column(name = "consumption_volume_id")
@@ -18,11 +36,11 @@ public class SerializedCompany {
     @Column(name = "generating_capacity")
     private boolean generatingCapacity;
     @Column(name = "inn")
-    private Long INN;
+    private Long inn;
     @Column(name = "kpp")
-    private Long KPP;
+    private Long kpp;
     @Column(name = "okpo")
-    private Long OKPO;
+    private Long okpo;
     @Column(name = "email")
     private String email;
     @Column(name = "phone")
@@ -36,30 +54,44 @@ public class SerializedCompany {
 
     public SerializedCompany() {}
 
+    /**
+     * Конструктор, создающий экземпляр SerializedCompany на основе объекта Company.
+     * @param company - стандартная версия Company.
+     */
     public SerializedCompany(Company company){
         this.companyId = company.getCompanyId();
         this.name = company.getName();
+        this.fullName = company.getFullName();
         this.kindOfActivity = company.getKindOfActivity();
         this.consumptionVolume = company.getConsumptionVolume();
         this.generatingCapacity = company.getGeneratingCapacity();
-        this.INN = company.getINN();
-        this.KPP = company.getKPP();
-        this.OKPO = company.getOKPO();
+        this.inn = company.getInn();
+        this.kpp = company.getKpp();
+        this.okpo = company.getOkpo();
         this.email = company.getEmail();
         this.phone = company.getPhone();
         this.creatorId = company.getCreatorId();
         this.changerId = company.getChangerId();
 
-        StringBuilder builder = new StringBuilder();
-        for(String note : company.getNotes()) {
-            builder.append(note);
-            builder.append('¥');
+        if (company.getNotes() == null){
+            this.notes = null;
         }
-        this.notes = builder.deleteCharAt(builder.length() - 1).toString();
+        else{
+            StringBuilder builder = new StringBuilder();
+            for(String note : company.getNotes()) {
+                builder.append(note);
+                builder.append('¥');
+            }
+            this.notes = builder.deleteCharAt(builder.length() - 1).toString();
+        }
     }
 
+    /** Метод, добавляющий новую заметку */
     public void addNewNote(String newNote){
-        setNotes(notes + "¥" + newNote);
+        if (notes == null){
+            notes = newNote;
+        }
+        else setNotes(notes + "¥" + newNote);
     }
 
     public Long getCompanyId() {
@@ -74,6 +106,13 @@ public class SerializedCompany {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getKindOfActivity() {
@@ -97,25 +136,25 @@ public class SerializedCompany {
         this.generatingCapacity = generatingCapacity;
     }
 
-    public Long getINN() {
-        return INN;
+    public Long getInn() {
+        return inn;
     }
-    public void setINN(Long INN) {
-        this.INN = INN;
-    }
-
-    public Long getKPP() {
-        return KPP;
-    }
-    public void setKPP(Long KPP) {
-        this.KPP = KPP;
+    public void setInn(Long inn) {
+        this.inn = inn;
     }
 
-    public Long getOKPO() {
-        return OKPO;
+    public Long getKpp() {
+        return kpp;
     }
-    public void setOKPO(Long OKPO) {
-        this.OKPO = OKPO;
+    public void setKpp(Long kpp) {
+        this.kpp = kpp;
+    }
+
+    public Long getOkpo() {
+        return okpo;
+    }
+    public void setOkpo(Long okpo) {
+        this.okpo = okpo;
     }
 
     public String getEmail() {
