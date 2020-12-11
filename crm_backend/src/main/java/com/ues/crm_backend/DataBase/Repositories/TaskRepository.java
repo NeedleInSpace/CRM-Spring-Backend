@@ -3,6 +3,7 @@ package com.ues.crm_backend.DataBase.Repositories;
 import com.ues.crm_backend.DataBase.Interfaces.EmployeeRepository;
 import com.ues.crm_backend.DataBase.Interfaces.ICompanyRepository;
 import com.ues.crm_backend.DataBase.Interfaces.ITaskRepository;
+import com.ues.crm_backend.Models.ContactPerson.SerializedContactPerson;
 import com.ues.crm_backend.Models.Employee;
 import com.ues.crm_backend.Models.Task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,30 @@ public class TaskRepository {
 
     public List<Task> getTasksByProjectId(Long projectId) {
         return taskRepository.getTasksByProjectId(projectId);
+    }
+
+    /**
+     * Обработчик эндпоинта getTaskById.
+     * @param taskId - id интересующей задачи.
+     * @return искомая задача.
+     */
+    public Task getTaskById(Long taskId){
+        Task task = taskRepository.getTaskById(taskId);
+
+        if (task == null) return null;
+
+        return task;
+    }
+
+    /**
+     * Обработчик эндпоинта deleteTask.
+     * @param taskId - id удаляемой задачи.
+     */
+    public void deleteTask(Long taskId){
+        Task task = taskRepository.getTaskById(taskId);
+
+        if (task == null) return;
+
+        taskRepository.delete(task);
     }
 }

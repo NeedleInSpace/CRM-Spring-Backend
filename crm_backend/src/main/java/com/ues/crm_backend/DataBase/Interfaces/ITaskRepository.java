@@ -1,5 +1,6 @@
 package com.ues.crm_backend.DataBase.Interfaces;
 
+import com.ues.crm_backend.Models.ContactPerson.SerializedContactPerson;
 import com.ues.crm_backend.Models.Task.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,4 +25,12 @@ public interface ITaskRepository extends JpaRepository<Task, Long> {
 
     @Query(value = "SELECT * FROM task WHERE task_project_id  = :projectId", nativeQuery = true)
     List<Task> getTasksByProjectId(@Param("projectId") Long projectId);
+
+    /**
+     * Запрос для получения задачи по id.
+     * @param taskId - id адачи.
+     * @return задача.
+     */
+    @Query(value = "SELECT * FROM task WHERE task_id  = :taskId", nativeQuery = true)
+    Task getTaskById(@Param("taskId") Long taskId);
 }

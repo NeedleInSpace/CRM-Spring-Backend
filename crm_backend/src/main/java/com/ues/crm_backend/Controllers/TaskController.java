@@ -70,6 +70,27 @@ public class TaskController {
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
+    @GetMapping(value = "api/tasks/{id}")
+    public ResponseEntity<Task> getTaskById(@PathVariable(name = "id") Long taskId) {
+        try {
+            Task task = taskRepository.getTaskById(taskId);
+            return new ResponseEntity<>(task, HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Эндпоинт для удаления задачи из БД.
+     * @param id - id удаляемой задачи.
+     * @return HTTP статус выполненной операции.
+     */
+    @DeleteMapping(value = "api/tasks/{id}")
+    public ResponseEntity<?> deleteTask(@PathVariable(name = "id") Long id){
+        taskRepository.deleteTask(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
