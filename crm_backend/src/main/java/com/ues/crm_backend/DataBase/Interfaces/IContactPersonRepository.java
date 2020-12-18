@@ -62,4 +62,8 @@ public interface IContactPersonRepository extends JpaRepository<SerializedContac
                       @Param("mainEmail") String mainEmail, @Param("otherEmails") String otherEmails,
                       @Param("notes")String notes, @Param("creatorId") Long creatorId, @Param("lastUpdaterId")Long lastUpdaterId,
                       @Param("mainPhone")Long mainPhone, @Param("otherPhones") String otherPhones);
+
+    @Modifying
+    @Query(value = "DELETE FROM contact_person WHERE contact_company_id = :companyId", nativeQuery = true)
+    void deleteContactsByCompanyId(@Param("companyId") Long companyId);
 }

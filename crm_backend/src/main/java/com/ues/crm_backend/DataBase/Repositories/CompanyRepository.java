@@ -1,6 +1,7 @@
 package com.ues.crm_backend.DataBase.Repositories;
 
 import com.ues.crm_backend.DataBase.Interfaces.ICompanyRepository;
+import com.ues.crm_backend.DataBase.Interfaces.IContactPersonRepository;
 import com.ues.crm_backend.Models.Company.Company;
 import com.ues.crm_backend.Models.Company.SerializedCompany;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class CompanyRepository{
     /** Интерфейс репозитория */
     @Autowired
     ICompanyRepository companyRepository;
+    @Autowired
+    IContactPersonRepository contactPersonRepository;
 
     /** Конструктор класса */
     public CompanyRepository(ICompanyRepository companyRepository){
@@ -124,10 +127,13 @@ public class CompanyRepository{
      * Обработчик эндпоинта deleteCompany.
      * @param companyId - id удаляемой компании.
      */
+    @Transactional
     public void deleteCompany(Long companyId){
         SerializedCompany serializedCompany = companyRepository.getCompanyById(companyId);
 
         if(serializedCompany == null) return;
+
+        contactPersonRepository.deleteContactsByCompanyId(serializedCompany.getCompanyId());
 
         companyRepository.delete(serializedCompany);
     }
