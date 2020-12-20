@@ -19,7 +19,9 @@ public class StageRepository {
         this.iStageRepository = iStageRepository;
         this.iProjectRepository = iProjectRepository;
     }
-
+    public Stage getStage(Long id){
+        return iStageRepository.findStageById(id);
+    }
     public List<Stage> getProjectStages(Long projectId){
         return iStageRepository.findStagesByProjectId(projectId);
     }

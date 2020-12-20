@@ -30,6 +30,17 @@ public class StageController {
         }
     }
 
+    @GetMapping("/stages/{id}")
+    public ResponseEntity<Stage> getStageById(@PathVariable(name = "id") Long id)
+    {
+        try {
+            Stage stage = stageRepository.getStage(id);
+            return new ResponseEntity<>(stage, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/stages")
     public ResponseEntity<?> addNewStage(@RequestBody Stage newStage) {
         try {
