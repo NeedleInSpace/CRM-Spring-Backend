@@ -85,8 +85,8 @@ public class ContactPersonRepository {
      * Обработчик эндпоинта addNewContact.
      * @param contactPerson - сохраняемое контактное лицо.
      */
-    public void addNewContact(ContactPerson contactPerson){
-        contactPersonRepository.save(new SerializedContactPerson(contactPerson));
+    public Long addNewContact(ContactPerson contactPerson){
+        return contactPersonRepository.save(new SerializedContactPerson(contactPerson)).getContactPersonId();
     }
 
     /**

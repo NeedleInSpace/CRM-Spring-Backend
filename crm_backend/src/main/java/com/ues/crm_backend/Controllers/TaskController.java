@@ -1,8 +1,6 @@
 package com.ues.crm_backend.Controllers;
 
 import com.ues.crm_backend.DataBase.Repositories.TaskRepository;
-import com.ues.crm_backend.Models.Company.Company;
-import com.ues.crm_backend.Models.Project.Project;
 import com.ues.crm_backend.Models.Task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +30,16 @@ public class TaskController {
         }
     }
 
+    @GetMapping(value = "api/employee/overdue/tasks/{userId}")
+    public ResponseEntity<?> getOverdueTasks(@PathVariable("userId") Long userId, @RequestParam("today") Date date) {
+        try {
+            List<Task> tasks = taskRepository.getOverdue(userId, date);
+            return new ResponseEntity<>(tasks, HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping(value = "api/employee/tasks")
     public ResponseEntity<List<Task>> getEmployeeTasksByDate(@RequestParam String username, @RequestParam Date date) {
         try {
@@ -55,19 +63,29 @@ public class TaskController {
     @PostMapping("api/tasks")
     public ResponseEntity<?> addNewTask(@RequestBody Task task) {
         try {
-            taskRepository.addNewTask(task);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            Long taskId = taskRepository.addNewTask(task);
+            return new ResponseEntity<>(taskId, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PatchMapping("/tasks")
+    @PatchMapping("api/tasks")
     public ResponseEntity<?> patchTask(@RequestBody Task task){
         try {
             taskRepository.patchTask(task);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("api/task/result")
+    public  ResponseEntity<?> addTaskResult(@RequestBody Task task) {
+        try {
+            taskRepository.addResult(task);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

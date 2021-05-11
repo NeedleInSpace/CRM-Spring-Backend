@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +27,16 @@ public class TaskRepository {
         return taskRepository.getAllEmployeeTasks(id);
     }
 
-    public void addNewTask(Task task) {
-        taskRepository.save(task);
+    public Long addNewTask(Task task) {
+        if(task.getEndDate() == null) {
+            task.setEndDate(task.getTaskDate());
+            task.setEndTime(task.getTaskTime());
+        }
+        return taskRepository.save(task).getTaskId();
+    }
+
+    public List<Task> getOverdue(Long userId, Date date) {
+        return taskRepository.findOverdueTasks(userId, date);
     }
 
     @Transactional
@@ -36,10 +45,19 @@ public class TaskRepository {
             taskRepository.patchTask(
                     task.getTaskId(), task.getTaskName(), task.getTaskProjectId(), task.getTaskStageId(),
                     task.getTaskCompanyId(), task.getContactId(), task.getTaskDate(), task.getTaskTime(),
-                    task.getTaskPlace(), task.getTaskDescription(), task.getTaskStatusId(), task.getEmployeeId(),
+                    task.getTaskPlace(), task.getResult(), task.getTaskDescription(), task.getTaskStatusId(), task.getEmployeeId(),
                     task.getEndDate(), task.getEndTime()
             );
         }catch (Exception e){
+            throw new Exception("Not Modified");
+        }
+    }
+
+    @Transactional
+    public void addResult(Task task) throws Exception {
+        try {
+            taskRepository.updateResult(task.getTaskId(), task.getResult());
+        } catch (Exception e) {
             throw new Exception("Not Modified");
         }
     }

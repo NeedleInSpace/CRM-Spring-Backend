@@ -1,5 +1,7 @@
 package com.ues.crm_backend.Models.Task;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
@@ -34,8 +36,19 @@ public class Task {
     private Long taskStatusId;
     @Column(name ="employee_id")
     private Long employeeId;
-    @Column(name ="end_date")
+    @Column(name ="end_date", columnDefinition = "date")
     private Date endDate;
+    @Column(name ="task_result")
+    private String result;
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setEndTime(Time endTime) {
+        this.endTime = endTime;
+    }
+
     @Column(name ="end_time")
     private Time endTime;
 
@@ -84,5 +97,8 @@ public class Task {
     }
     public Time getEndTime() {
         return endTime;
+    }
+    public String getResult() {
+        return result;
     }
 }
