@@ -4,6 +4,7 @@ import com.ues.crm_backend.DataBase.Interfaces.ICompanyRepository;
 import com.ues.crm_backend.DataBase.Interfaces.IContactPersonRepository;
 import com.ues.crm_backend.Models.Company.Company;
 import com.ues.crm_backend.Models.Company.SerializedCompany;
+import com.ues.crm_backend.Models.ContactPerson.ContactPerson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class CompanyRepository{
     @Autowired
     ICompanyRepository companyRepository;
     @Autowired
-    IContactPersonRepository contactPersonRepository;
+    ContactPersonRepository contactPersonRepository;
 
     /** Конструктор класса */
     public CompanyRepository(ICompanyRepository companyRepository){
@@ -129,12 +130,21 @@ public class CompanyRepository{
      */
     @Transactional
     public void deleteCompany(Long companyId){
-        SerializedCompany serializedCompany = companyRepository.getCompanyById(companyId);
+        try {
+            SerializedCompany serializedCompany = companyRepository.getCompanyById(companyId);
 
-        if(serializedCompany == null) return;
+            if(serializedCompany == null) return;
 
-        contactPersonRepository.deleteContactsByCompanyId(serializedCompany.getCompanyId());
+            List<ContactPerson> companyContacts = contactPersonRepository.getAllContactPersonByCompanyId(serializedCompany.getCompanyId());
+            for (ContactPerson contact : companyContacts) {
+                contactPersonRepository.deleteContactPerson(contact.getContactPersonId());
+            }
+            companyRepository.delete(serializedCompany);
+        }catch(Exception e) {
+            System.out.println(e.getStackTrace());
+        }
 
-        companyRepository.delete(serializedCompany);
+
+
     }
 }

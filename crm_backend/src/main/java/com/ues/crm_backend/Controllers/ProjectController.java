@@ -42,6 +42,15 @@ public class ProjectController {
 
     }
 
+    @GetMapping("/employee/projects/{userId}")
+    public ResponseEntity<?> getManagerProjects(@PathVariable("userId") Long userId) {
+        try {
+            return new ResponseEntity<>(projectRepository.getProjectsOfManager(userId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/projects")
     public ResponseEntity<?> addNewProject(@RequestBody Project project) {
         try {

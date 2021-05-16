@@ -30,6 +30,12 @@ public interface ITaskRepository extends JpaRepository<Task, Long> {
 
     @Query(value = "SELECT * FROM task WHERE task_project_id  = :projectId", nativeQuery = true)
     List<Task> getTasksByProjectId(@Param("projectId") Long projectId);
+    @Modifying
+    @Query(value = "DELETE FROM task WHERE task_stage_id  = :stageId", nativeQuery = true)
+    void deleteTasksByStageId(@Param("stageId") Long stageId);
+    @Modifying
+    @Query(value = "DELETE FROM task WHERE contact_id  = :contactId", nativeQuery = true)
+    void deleteTasksByContactId(@Param("contactId") Long contactId);
 
     @Query(value = "UPDATE task SET task_result = :taskResult WHERE task_id = :taskId", nativeQuery = true)
     void updateResult(@Param("taskId") Long taskId, @Param("taskResult") String taskResult);

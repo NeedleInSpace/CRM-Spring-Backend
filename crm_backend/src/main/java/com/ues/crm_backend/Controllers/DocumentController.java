@@ -33,7 +33,7 @@ public class DocumentController {
 
             for (MultipartFile file : files) {
                 Document newDocument = new Document();
-                newDocument.setTaskId(taskId);
+                newDocument.setTask(documentTask);
                 newDocument.setCompanyId(documentTask.getTaskCompanyId());
                 newDocument.setProjectId(documentTask.getTaskProjectId());
                 System.out.println(Arrays.toString(file.getBytes()));

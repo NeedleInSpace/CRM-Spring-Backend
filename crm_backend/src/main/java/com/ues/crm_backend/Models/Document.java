@@ -1,5 +1,6 @@
 package com.ues.crm_backend.Models;
 
+import com.ues.crm_backend.Models.Task.Task;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -21,8 +22,9 @@ public class Document {
     @Column(name="company_id")
     private Long companyId;
 
-    @Column(name="task_id")
-    private Long taskId;
+    @ManyToOne()
+    @JoinColumn(name = "task_id", nullable = false)
+    private Task task;
 
     @Lob
     @Column(name="doc_file")
@@ -35,7 +37,6 @@ public class Document {
         this.docId = docId;
         this.projectId = projectId;
         this.companyId = companyId;
-        this.taskId = taskId;
     }
 
     public long getDocId() {
@@ -54,8 +55,8 @@ public class Document {
         return companyId;
     }
 
-    public Long getTaskId() {
-        return taskId;
+    public Task getTask() {
+        return task;
     }
 
     public byte[] getContext() {
@@ -74,8 +75,8 @@ public class Document {
         this.companyId = companyId;
     }
 
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public void setContext(byte[] context) {
