@@ -1,6 +1,6 @@
 package com.ues.crm_backend.Controllers;
 
-import com.ues.crm_backend.DataBase.Interfaces.EmployeeRepository;
+import com.ues.crm_backend.DataBase.Interfaces.IEmployeeRepository;
 import com.ues.crm_backend.Models.AuthenticationRequestDTD;
 import com.ues.crm_backend.Models.Employee;
 import com.ues.crm_backend.Models.Token;
@@ -11,14 +11,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,13 +24,13 @@ import java.util.Map;
 public class AuthRestController {
 
     private final AuthenticationManager authenticationManager;
-    private EmployeeRepository employeeRepository;
+    private IEmployeeRepository IEmployeeRepository;
     private JWTTokenProvider jwtTokenProvider;
 
     /**Конструктор класса*/
-    public AuthRestController(AuthenticationManager authenticationManager, EmployeeRepository employeeRepository, JWTTokenProvider jwtTokenProvider) {
+    public AuthRestController(AuthenticationManager authenticationManager, IEmployeeRepository IEmployeeRepository, JWTTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
-        this.employeeRepository = employeeRepository;
+        this.IEmployeeRepository = IEmployeeRepository;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -45,7 +42,7 @@ public class AuthRestController {
         try{
             UsernamePasswordAuthenticationToken uuu = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
             authenticationManager.authenticate(uuu);
-            Employee employee = employeeRepository.findByUsername(request.getUsername()).orElseThrow(()-> new UsernameNotFoundException("User doesn't exists"));
+            Employee employee = IEmployeeRepository.findByUsername(request.getUsername()).orElseThrow(()-> new UsernameNotFoundException("User doesn't exists"));
             Token token = new Token(request.getUsername(), employee.getRole().getRole(), this.jwtTokenProvider);
             Token.Alltokens.add(token);
             Map<Object, Object> response = new HashMap<>();

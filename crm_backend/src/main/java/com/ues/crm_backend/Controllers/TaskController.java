@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class TaskController {
@@ -41,9 +43,9 @@ public class TaskController {
     }
 
     @GetMapping(value = "api/employee/tasks")
-    public ResponseEntity<List<Task>> getEmployeeTasksByDate(@RequestParam String username, @RequestParam Date date) {
+    public ResponseEntity<List<Task>> getEmployeeTasksByDate(@RequestParam Long userId, @RequestParam Date date) {
         try {
-            List<Task> tasks = taskRepository.getTasksByDate(username, date);
+            List<Task> tasks = taskRepository.getTasksByDate(userId, date);
             return new ResponseEntity<>(tasks, HttpStatus.OK);
         } catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -100,6 +102,45 @@ public class TaskController {
         }
     }
 
+    @GetMapping(value = "api/tasks/project/{id}")
+    public ResponseEntity<?> getProjectTasks(@PathVariable(name = "id") Long projectId) {
+        try {
+            List<Task> stageTasks = taskRepository.getTasksByStageId(projectId);
+            return new ResponseEntity<>(stageTasks, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "api/tasks/count")
+    public ResponseEntity<?> getManagerTasksCount() {
+        try {
+            List<Object[]> countMap = taskRepository.getManagerTasksCount();
+            return new ResponseEntity<>(countMap, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "api/tasks/waiting/{projectId}")
+    public ResponseEntity<?> getProjectTasksWaitingList(@PathVariable Long projectId, @RequestParam Long creatorId) {
+        try {
+            List<Task> waitingTasks = taskRepository.getProjectWaitingList(creatorId, projectId);
+            return new ResponseEntity<>(waitingTasks, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "api/tasks/waiting")
+    public ResponseEntity<?> getAllTasksWaitingList(@RequestParam Long creatorId) {
+        try {
+            List<Task> waitingTasks = taskRepository.getWaitingList(creatorId);
+            return new ResponseEntity<>(waitingTasks, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     /**
      * Эндпоинт для удаления задачи из БД.
      * @param id - id удаляемой задачи.

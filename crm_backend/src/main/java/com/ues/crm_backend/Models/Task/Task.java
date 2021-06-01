@@ -43,13 +43,16 @@ public class Task {
     private Long taskStatusId;
     @Column(name ="employee_id")
     private Long employeeId;
+    @Column(name ="creator_id")
+    private Long creatorId;
     @Column(name ="end_date", columnDefinition = "date")
     private Date endDate;
     @Column(name ="task_result")
     private String result;
-    @JsonIgnore
-    @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    private List<Document> taskDocuments;
+    @Column(name ="task_comment")
+    private String comment;
+    @Column(name="is_assignment")
+    private boolean isAssignment;
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
@@ -102,6 +105,11 @@ public class Task {
     public Long getEmployeeId() {
         return employeeId;
     }
+
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
     public Date getEndDate() {
         return endDate;
     }
@@ -110,5 +118,12 @@ public class Task {
     }
     public String getResult() {
         return result;
+    }
+
+    public boolean getIsAssignment() {
+        return isAssignment;
+    }
+    public String getComment() {
+        return  comment;
     }
 }
