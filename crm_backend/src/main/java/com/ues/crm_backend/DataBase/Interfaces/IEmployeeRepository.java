@@ -19,4 +19,15 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query(value = "SELECT employee.employee_id, employee.employee_name FROM employee join employee_role ON employee.employee_role_id = employee_role.role_id WHERE role_name = :employeeRole", nativeQuery = true)
     List<Object[]> findManagers(@Param("employeeRole") String employeeRole);
+
+    @Query(value = "SELECT creator_id, count(*) " +
+            "FROM contact_person " +
+            "WHERE creation_date >= current_date - :period " +
+            "GROUP BY creator_id", nativeQuery = true)
+    List<Object[]> getContactCountInPeriod(@Param("period") int period);
+
+    @Query(value = "SELECT creator_id, count(*) FROM company " +
+            "WHERE creation_date >= current_date - :period " +
+            "GROUP BY creator_id", nativeQuery = true)
+    List<Object[]> getCompanyCountInPeriod(@Param("period") int period);
 }

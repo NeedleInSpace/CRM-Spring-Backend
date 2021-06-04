@@ -89,4 +89,17 @@ public interface ITaskRepository extends JpaRepository<Task, Long> {
             "or (task_date >= current_date - :period and task_status_id = 1)) " +
            "GROUP BY task_status_id", nativeQuery = true)
     List<Object[]> getTaskCount(@Param("period") int period);
+
+    @Query(value = "SELECT task_status_id, count(*) from task " +
+            "WHERE is_assignment = true and task_project_id = :projectId and " +
+            "((end_date >= current_date - :period and (task_status_id = 3 or task_status_id = 4)) " +
+            "or (task_date >= current_date - :period and task_status_id = 1)) " +
+            "GROUP BY task_status_id", nativeQuery = true)
+    List<Object[]> getTaskCountByProject(@Param("period") int period, @Param("projectId") Long projectId);
+
+    @Query(value = "SELECT task_status_id, count(*) FROM task JOIN employee on task.employee_Id = employee.employee_id " +
+            "WHERE employee.employee_id = :employeeId AND is_assignment = true AND ((end_date >= current_date - :period AND (task_status_id = 3 OR task_status_id = 4)) " +
+            "OR (task_date >= current_date - :period AND task_status_id = 1)) " +
+            "GROUP BY task_status_id", nativeQuery = true)
+    List<Object[]> getTaskCountByEmployee(@Param("period") int period, @Param("employeeId") Long employeeId);
 }

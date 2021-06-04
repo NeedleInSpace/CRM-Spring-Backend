@@ -23,7 +23,7 @@ public class TaskRepository {
     @Autowired
     ITaskRepository taskRepository;
     @Autowired
-    IEmployeeRepository IEmployeeRepository;
+    IEmployeeRepository employeeRepository;
 
     @Autowired
     IProjectRepository projectRepository;
@@ -144,6 +144,40 @@ public class TaskRepository {
         ArrayList<BigInteger> month = getMap(taskRepository.getTaskCount(30));
         ArrayList<BigInteger> year = getMap(taskRepository.getTaskCount(365));
         ArrayList<BigInteger> all = getMap(taskRepository.getTaskCount(36500));
+        Map<Object, Object> response = new HashMap<>();
+        response.put("label", "Задачи");
+        response.put("day", day);
+        response.put("week", week);
+        response.put("month", month);
+        response.put("year", year);
+        response.put("all", all);
+        return response;
+    }
+
+    public Map<Object, Object> getTasksCountByProject(Long projectId) {
+        ArrayList<BigInteger> day = getMap(taskRepository.getTaskCountByProject(0, projectId));
+        ArrayList<BigInteger>  week = getMap(taskRepository.getTaskCountByProject(7, projectId));
+
+        ArrayList<BigInteger> month = getMap(taskRepository.getTaskCountByProject(30, projectId));
+        ArrayList<BigInteger> year = getMap(taskRepository.getTaskCountByProject(365, projectId));
+        ArrayList<BigInteger> all = getMap(taskRepository.getTaskCountByProject(36500, projectId));
+        Map<Object, Object> response = new HashMap<>();
+        response.put("label", "Задачи");
+        response.put("day", day);
+        response.put("week", week);
+        response.put("month", month);
+        response.put("year", year);
+        response.put("all", all);
+        return response;
+    }
+
+    public Map<Object, Object> getTasksCountByEmployee(Long employeeId) {
+        ArrayList<BigInteger> day = getMap(taskRepository.getTaskCountByEmployee(0, employeeId));
+        ArrayList<BigInteger>  week = getMap(taskRepository.getTaskCountByEmployee(7, employeeId));
+
+        ArrayList<BigInteger> month = getMap(taskRepository.getTaskCountByEmployee(30, employeeId));
+        ArrayList<BigInteger> year = getMap(taskRepository.getTaskCountByEmployee(365, employeeId));
+        ArrayList<BigInteger> all = getMap(taskRepository.getTaskCountByEmployee(36500, employeeId));
         Map<Object, Object> response = new HashMap<>();
         response.put("label", "Задачи");
         response.put("day", day);
