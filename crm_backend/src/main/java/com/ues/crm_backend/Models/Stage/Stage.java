@@ -1,8 +1,13 @@
 package com.ues.crm_backend.Models.Stage;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ues.crm_backend.Models.Project.Project;
+import com.ues.crm_backend.Models.Task.Task;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "stage")
@@ -17,7 +22,7 @@ public class Stage {
     String stageName;
 
     @Column(name = "project_id")
-    Long projectId;
+    private Long projectId;
 
     @Column(name = "stage_result")
     String result;
@@ -28,6 +33,7 @@ public class Stage {
     @Column(name = "stage_number")
     int stageNumber;
 
+
     public Stage(){
     }
     public Long getId() {
@@ -36,10 +42,6 @@ public class Stage {
 
     public String getStageName() {
         return stageName;
-    }
-
-    public Long getProjectId() {
-        return projectId;
     }
 
     public String getResult() {
@@ -54,7 +56,11 @@ public class Stage {
         return stageNumber;
     }
 
-    public void setProject(Long projectId) {
-        this.projectId = projectId;
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setStageNumber(int stageNumber) {
+        this.stageNumber = stageNumber;
     }
 }

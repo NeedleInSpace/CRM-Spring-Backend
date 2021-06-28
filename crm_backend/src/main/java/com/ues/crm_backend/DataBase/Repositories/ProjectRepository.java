@@ -14,12 +14,12 @@ import java.util.List;
 public class ProjectRepository {
 
     IProjectRepository iProjectRepository;
-    IStageRepository iStageRepository;
+    @Autowired
+    StageRepository stageRepository;
 
     @Autowired
     public ProjectRepository(IProjectRepository iProjectRepository, IStageRepository iStageRepository) {
         this.iProjectRepository = iProjectRepository;
-        this.iStageRepository =iStageRepository;
     }
 
     public List<Project> getAllProjects(){
@@ -34,6 +34,10 @@ public class ProjectRepository {
         return iProjectRepository.save(project);
     }
 
+    public List<Project> getProjectsOfManager(Long employeeId) {
+        return iProjectRepository.findProjectsOfManager(employeeId);
+    }
+
     @Transactional
     public void patchProject(Project project) throws Exception {
         try {
@@ -46,10 +50,10 @@ public class ProjectRepository {
 
     public void deleteProject(Long id) throws Exception {
         try {
-            List<Stage> projectStages = iStageRepository.findStagesByProjectId(id);
+            List<Stage> projectStages = stageRepository.getProjectStages(id);
             if(projectStages != null)
                 for (Stage projectStage :projectStages)
-                    iStageRepository.delete(projectStage);
+                    stageRepository.deleteStageById(projectStage.getId());
             Project project = iProjectRepository.findProjectById(id);
             iProjectRepository.delete(project);
         }catch (Exception e){

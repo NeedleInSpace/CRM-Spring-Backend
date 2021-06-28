@@ -1,6 +1,7 @@
 package com.ues.crm_backend.DataBase.Repositories;
 
 import com.ues.crm_backend.DataBase.Interfaces.IContactPersonRepository;
+import com.ues.crm_backend.DataBase.Interfaces.ITaskRepository;
 import com.ues.crm_backend.Models.Company.Company;
 import com.ues.crm_backend.Models.Company.SerializedCompany;
 import com.ues.crm_backend.Models.ContactPerson.ContactPerson;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,7 +29,8 @@ public class ContactPersonRepository {
     /** Интерфейс репозитория */
     @Autowired
     IContactPersonRepository contactPersonRepository;
-
+    @Autowired
+    ITaskRepository iTaskRepository;
     /** Конструктор класса */
     public ContactPersonRepository(IContactPersonRepository contactPersonRepository){
         this.contactPersonRepository = contactPersonRepository;
@@ -85,8 +88,8 @@ public class ContactPersonRepository {
      * Обработчик эндпоинта addNewContact.
      * @param contactPerson - сохраняемое контактное лицо.
      */
-    public void addNewContact(ContactPerson contactPerson){
-        contactPersonRepository.save(new SerializedContactPerson(contactPerson));
+    public Long addNewContact(ContactPerson contactPerson){
+        return contactPersonRepository.save(new SerializedContactPerson(contactPerson)).getContactPersonId();
     }
 
     /**
@@ -109,12 +112,18 @@ public class ContactPersonRepository {
      * Обработчик эндпоинта deleteContactPerson.
      * @param personId - id удаляемого контактного лица.
      */
+    @Transactional
     public void deleteContactPerson(Long personId){
-        SerializedContactPerson serializedContactPerson = contactPersonRepository.getContactPersonById(personId);
+        try {
+            SerializedContactPerson serializedContactPerson = contactPersonRepository.getContactPersonById(personId);
 
-        if (serializedContactPerson == null) return;
-
-        contactPersonRepository.delete(serializedContactPerson);
+            if (serializedContactPerson == null) return;
+            Long s = serializedContactPerson.getContactPersonId();
+            iTaskRepository.deleteTasksByContactId(s);
+            contactPersonRepository.delete(serializedContactPerson);
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+        }
     }
 
     @Transactional

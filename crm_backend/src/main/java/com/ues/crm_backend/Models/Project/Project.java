@@ -1,9 +1,14 @@
 package com.ues.crm_backend.Models.Project;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ues.crm_backend.Models.Stage.Stage;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "project")
@@ -32,6 +37,10 @@ public class Project {
 
     @Column(name ="project_description")
     private String description;
+
+    /*@JsonIgnore
+    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<Stage> projectStages;*/
 
     public Project() {
     }

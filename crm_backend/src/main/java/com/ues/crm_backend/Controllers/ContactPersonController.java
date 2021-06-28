@@ -85,9 +85,9 @@ public class ContactPersonController {
      */
     @PostMapping(value = "api/contacts")
     public ResponseEntity<?> addNewContact(@RequestBody ContactPerson contactPerson){
-        contactPersonRepository.addNewContact(contactPerson);
+        Long contactId = contactPersonRepository.addNewContact(contactPerson);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(contactId, HttpStatus.CREATED);
     }
 
     /**
